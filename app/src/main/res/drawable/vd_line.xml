@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="ft_avd_toarrow"
+    android:width="80.0dip"
+    android:height="5.0dip"
+    android:viewportWidth="200.0"
+    android:viewportHeight="40.0">
+    <path
+        android:name="path_line"
+        android:fillAlpha="0.0"
+        android:fillColor="#ff000000"
+        android:pathData="M 0,4 L 200,4"
+        android:strokeWidth="24.0"
+        android:strokeColor="@color/theme"
+        android:trimPathEnd="0.2" />
+</vector>

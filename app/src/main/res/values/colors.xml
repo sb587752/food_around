@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorGreen">#ff00a551</color>
+    <color name="colorPrimary">#ffffffff</color>
+    <color name="colorPrimaryDark">#ffffffff</color>
+    <color name="colorPrimaryText">#ff303338</color>
+    <color name="colorRed">#ffb31101</color>
+    <color name="colorSecondaryText">#ff888888</color>
+    <color name="colorText">#ffffffff</color>
+    <color name="colorTextBlack">#ff212121</color>
+    <color name="colorTextWhite">#ffffffff</color>
+    <color name="colorTransparent">#00ff6d00</color>
+    <color name="colorWhite">#ffffffff</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="theme">#ff6d00</color>
+    <color name="background_color">#f5f5f5</color>
+    <color name="colorPrimaryToolbar">#ff97807b</color>
+    <color name="grey">#ffa4a4a4</color>
+    <color name="light_grey">#ffdcdcdc</color>
+    <!--<color name="slate_50">#3332325d</color>-->
+    <!--<color name="accent_color_default">#ff2296f3</color>-->
+    <!--<color name="control_normal_color_default">#ff90a4ae</color>-->
+    <!--<color name="toolbar_color_default">#ff3f51b5</color>-->
+    <color name="place_autocomplete_prediction_primary_text">#ff212121</color>
+    <color name="place_autocomplete_prediction_primary_text_highlight">#ff757575</color>
+    <color name="place_autocomplete_prediction_secondary_text">#ff757575</color>
+    <color name="place_autocomplete_search_hint">#ffbdbdbd</color>
+    <color name="place_autocomplete_search_text">#ff212121</color>
+    <color name="place_autocomplete_separator">#1f000000</color>
+</resources>

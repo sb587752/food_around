@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "587367255325",
+    "firebase_url": "https://food-order-delivery-b9545.firebaseio.com",
+    "project_id": "food-order-delivery-b9545",
+    "storage_bucket": "food-order-delivery-b9545.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587367255325:android:289b664ab8b8bde5",
+        "android_client_info": {
+          "package_name": "com.opalfire.orderaround"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "587367255325-5l06sccbep4qbmfcagnvrm95f86iptak.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.opalfire.orderaround",
+            "certificate_hash": "5873b6aa229b6267571ef413b579ede9bc18c9f6"
+          }
+        },
+        {
+          "client_id": "587367255325-1947it2qpv61sdh1di0eiicgkn4cethb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJ6K02qxv6LiF4RnUVmVpsci2JzZ-6-FE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "587367255325-1947it2qpv61sdh1di0eiicgkn4cethb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

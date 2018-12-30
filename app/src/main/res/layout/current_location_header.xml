@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/current_location_ll"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:paddingTop="16.0dip">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal"
+        android:paddingStart="8.0dip"
+        android:paddingEnd="8.0dip">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="@dimen/activity_vertical_margin_half"
+                android:contentDescription="@string/current_location"
+                android:src="@drawable/ic_locator" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                fontPath="fonts/Nunito-Bold.ttf"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4.0sp"
+                android:maxLines="1"
+                android:text="Current Location"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="@dimen/text_small"
+                tools:ignore="MissingPrefix" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4.0sp"
+                android:maxLines="1"
+                android:text="Enable Location Services"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/text_tiny" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1.0dip"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/colorSecondaryText" />
+</LinearLayout>

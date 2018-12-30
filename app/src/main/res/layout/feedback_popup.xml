@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        fontPath="fonts/Nunito-Bold.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16.0dip"
+        android:text="FEEDBACK"
+        android:textSize="16.0sp"
+        tools:ignore="MissingPrefix" />
+
+    <TextView
+        fontPath="fonts/Nunito-Bold.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16.0dip"
+        android:text="How was the delivery?"
+        android:textSize="14.0sp"
+        android:textStyle="bold"
+        tools:ignore="MissingPrefix" />
+
+    <RadioGroup
+        android:id="@+id/rate_radiogroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16.0dip"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/radio_button"
+            android:button="@null"
+            android:drawableTop="@drawable/sad72"
+            android:gravity="center"
+            android:padding="8.0dip"
+            android:text="Terrible"
+            android:textAllCaps="true"
+            android:textSize="8.0sp" />
+
+        <RadioButton
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/radio_button"
+            android:button="@null"
+            android:drawableTop="@drawable/emotion72"
+            android:gravity="center"
+            android:padding="8.0dip"
+            android:text="Bad"
+            android:textAllCaps="true"
+            android:textSize="8.0sp" />
+
+        <RadioButton
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/radio_button"
+            android:button="@null"
+            android:drawableTop="@drawable/happyy72"
+            android:gravity="center"
+            android:padding="8.0dip"
+            android:text="Okay"
+            android:textAllCaps="true"
+            android:textSize="8.0sp" />
+
+        <RadioButton
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/radio_button"
+            android:button="@null"
+            android:drawableTop="@drawable/happy72"
+            android:gravity="center"
+            android:padding="8.0dip"
+            android:text="Good"
+            android:textAllCaps="true"
+            android:textSize="8.0sp" />
+
+        <RadioButton
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/radio_button"
+            android:button="@null"
+            android:drawableTop="@drawable/smille"
+            android:gravity="center"
+            android:padding="8.0dip"
+            android:text="Superb"
+            android:textAllCaps="true"
+            android:textSize="8.0sp" />
+    </RadioGroup>
+
+    <TextView
+        fontPath="fonts/Nunito-Bold.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16.0dip"
+        android:text="Give some feedbak in words."
+        android:textSize="14.0sp"
+        android:textStyle="bold"
+        tools:ignore="MissingPrefix" />
+
+    <EditText
+        android:id="@+id/comment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16.0dip"
+        android:background="@drawable/shadow_view"
+        android:inputType="textMultiLine"
+        android:lines="3"
+        android:padding="8.0dip" />
+
+    <Button
+        android:id="@+id/feedback_submit"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="Submit"
+        android:textColor="@color/colorWhite" />
+</LinearLayout>

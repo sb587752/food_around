@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.amar.library.ui.StickyScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    app:stickyHeader="@id/title">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/animation_line_image"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/avd_line" />
+
+        <LinearLayout
+            android:id="@+id/root_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/impressive_dishes_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/offer_title_header"
+                    fontPath="fonts/Nunito-Bold.ttf"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:padding="@dimen/_8sdp"
+                    android:text="@string/let_impress_you"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_tiny"
+                    tools:ignore="MissingPrefix" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/impressive_dishes_rv"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/restaurant_count_txt"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.0"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:padding="@dimen/_8sdp"
+                    android:text="@string/hundred_restaurant"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_tiny" />
+
+                <Spinner
+                    android:id="@+id/catagoery_spinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/bg_spinner"
+                    android:gravity="end|center"
+                    android:maxLines="1"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_tiny"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/restaurants_rv"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_60sdp"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:id="@+id/error_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="100.0dip"
+                    android:layout_height="100.0dip"
+                    android:layout_marginTop="@dimen/_70sdp"
+                    android:padding="8.0dip"
+                    android:src="@drawable/no_restaurant_found" />
+
+                <TextView
+                    fontPath="fonts/Nunito-Bold.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20.0dip"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="@string/no_restaurant_found"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="22.0sp"
+                    tools:ignore="MissingPrefix" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8.0sp"
+                    android:gravity="center"
+                    android:maxLines="3"
+                    android:text="@string/no_restaurant_found_in_your_location"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="14.0sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0dip"
+                    android:layout_marginStart="4.0dip"
+                    android:layout_marginTop="10.0dip"
+                    android:background="#ff878787"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16.0dip"
+                    android:fillViewport="true"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10.0dip"
+                        android:maxLines="1"
+                        android:text="@string/discover"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="16.0sp" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/discover_rv"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16.0dip"
+                        android:orientation="horizontal" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0dip"
+                    android:layout_marginStart="4.0dip"
+                    android:layout_marginTop="16.0dip"
+                    android:background="#ff878787"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16.0dip"
+                    android:fillViewport="true"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16.0dip"
+                        android:maxLines="1"
+                        android:text="@string/offers_near_you"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="16.0sp" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/restaurants_offer_rv"
+                        android:layout_width="fill_parent"
+                        android:layout_height="150.0dip"
+                        android:layout_marginTop="16.0dip"
+                        android:orientation="horizontal" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</com.amar.library.ui.StickyScrollView>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite"
+    android:orientation="vertical"
+    android:padding="8.0dip">
+
+    <CheckBox
+        android:id="@+id/chk_selected"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:button="@null"
+        android:drawableRight="@drawable/check_selector"
+        android:padding="8.0dip"
+        android:text="Tamil"
+        android:textSize="@dimen/text_small" />
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="fill_parent"
+        android:layout_height="1.0dip"
+        android:layout_marginTop="4.0dip"
+        android:background="#ffeeeeee" />
+</LinearLayout>
