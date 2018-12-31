@@ -196,6 +196,7 @@ public class MobileNumberActivity extends AppCompatActivity implements OnConnect
 
     private void setListener() {
         this.mCountryPicker.setListener(new CountryPickerListener() {
+            @Override
             public void onSelectCountry(String str, String str2, String str3, int i) {
                 MobileNumberActivity.this.mCountryDialCodeTextView.setText(str3);
                 MobileNumberActivity.this.country_code = str3;
@@ -278,7 +279,7 @@ public class MobileNumberActivity extends AppCompatActivity implements OnConnect
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.already_have_aacount_txt:
-                startActivity(new Intent(this.context, LoginActivity.class).addFlags(67108864));
+                startActivity(new Intent(this.context, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 finish();
                 return;

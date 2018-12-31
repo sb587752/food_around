@@ -607,7 +607,7 @@ Error: java.lang.NullPointerException
                 this.address.setMapAddress(this.addressEdit.getText().toString());
                 this.address.setType(this.addressHeader);
                 GlobalData.selectedAddress = this.address;
-                startActivity(new Intent(this.context, HomeActivity.class).addFlags(67108864));
+                startActivity(new Intent(this.context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
                 return;
             default:

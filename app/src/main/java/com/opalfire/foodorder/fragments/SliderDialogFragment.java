@@ -10,6 +10,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,35 +28,53 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class SliderDialogFragment extends DialogFragment {
-    @BindView(2131296747)
-    ViewPager productSlider;
-    @BindView(2131296748)
-    LinearLayout productSliderDots;
+
     SliderPagerAdapter sliderPagerAdapter;
-    List<Image> slider_image_list = new ArrayList();
+    List<Image> slider_image_list = new ArrayList<>();
     Unbinder unbinder;
+    @BindView(R.id.close_img)
+    ImageView closeImg;
+    @BindView(R.id.product_slider)
+    ViewPager productSlider;
+    @BindView(R.id.product_slider_dots)
+    LinearLayout productSliderDots;
 
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.fragment_slider_dialog, viewGroup);
-        this.unbinder = ButterKnife.bind((Object) this, inflate);
+        unbinder = ButterKnife.bind(this, inflate);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(0));
-        this.slider_image_list.addAll(GlobalData.isSelectedProduct.getImages());
-        this.sliderPagerAdapter = new SliderPagerAdapter(getActivity(), this.slider_image_list, Boolean.valueOf(false));
-        this.productSlider.setAdapter(this.sliderPagerAdapter);
-        this.productSlider.addOnPageChangeListener(new C14121());
+        slider_image_list.addAll(GlobalData.isSelectedProduct.getImages());
+        sliderPagerAdapter = new SliderPagerAdapter(getActivity(), slider_image_list, Boolean.FALSE);
+        productSlider.setAdapter(sliderPagerAdapter);
+        productSlider.addOnPageChangeListener(new OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                addBottomDots(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
         addBottomDots(View.VISIBLE);
         return inflate;
     }
 
     private void addBottomDots(int i) {
-        TextView[] textViewArr = new TextView[this.slider_image_list.size()];
-        this.productSliderDots.removeAllViews();
+        TextView[] textViewArr = new TextView[slider_image_list.size()];
+        productSliderDots.removeAllViews();
         for (int i2 = 0; i2 < textViewArr.length; i2++) {
             textViewArr[i2] = new TextView(getActivity());
             textViewArr[i2].setText(Html.fromHtml("&#8226;"));
             textViewArr[i2].setTextSize(35.0f);
             textViewArr[i2].setTextColor(Color.parseColor("#000000"));
-            this.productSliderDots.addView(textViewArr[i2]);
+            productSliderDots.addView(textViewArr[i2]);
         }
         if (textViewArr.length > 0) {
             textViewArr[i].setTextColor(Color.parseColor("#FFFFFF"));
@@ -64,31 +83,16 @@ public class SliderDialogFragment extends DialogFragment {
 
     public void onDestroyView() {
         super.onDestroyView();
-        this.unbinder.unbind();
+        unbinder.unbind();
     }
 
     public void onStart() {
         super.onStart();
     }
 
-    @OnClick({2131296417})
+    @OnClick(R.id.close_img)
     public void onViewClicked() {
         dismiss();
     }
 
-    /* renamed from: com.entriver.orderaround.fragments.SliderDialogFragment$1 */
-    class C14121 implements OnPageChangeListener {
-        C14121() {
-        }
-
-        public void onPageScrollStateChanged(int i) {
-        }
-
-        public void onPageScrolled(int i, float f, int i2) {
-        }
-
-        public void onPageSelected(int i) {
-            SliderDialogFragment.this.addBottomDots(i);
-        }
-    }
 }

@@ -17,6 +17,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        buildTypes.each {
+            it.buildConfigField("String", "PUBNUB_CHANNEL_NAME", PUBNUB_CHANNEL_NAME)
+            it.buildConfigField("String", "PUBNUB_SUBSCRIBE_KEY", PUBNUB_SUBSCRIBE_KEY)
+            it.buildConfigField("String", "PUBNUB_PUBLISH_KEY", PUBNUB_PUBLISH_KEY)
+        }
     }
 }
 ext {    // Having consistent versions between modules can avoid conflicts with behavior.
@@ -85,7 +90,7 @@ dependencies {
     implementation 'com.sackcentury:shinebutton:0.2.0'
     implementation 'com.stripe:stripe-android:8.1.0'
     implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
-
+    implementation group: 'com.pubnub', name: 'pubnub-gson', version: '4.21.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

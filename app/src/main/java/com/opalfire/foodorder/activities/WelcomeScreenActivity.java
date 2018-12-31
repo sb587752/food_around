@@ -247,7 +247,7 @@ public class WelcomeScreenActivity extends AppCompatActivity implements Connecti
         }
 
         public void onClick(View view) {
-            WelcomeScreenActivity.this.startActivity(new Intent(WelcomeScreenActivity.this, LoginActivity.class).addFlags(67108864));
+            WelcomeScreenActivity.this.startActivity(new Intent(WelcomeScreenActivity.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             WelcomeScreenActivity.this.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
             WelcomeScreenActivity.this.finish();
         }
@@ -259,7 +259,7 @@ public class WelcomeScreenActivity extends AppCompatActivity implements Connecti
         }
 
         public void onClick(View view) {
-            WelcomeScreenActivity.this.startActivity(new Intent(WelcomeScreenActivity.this, MobileNumberActivity.class).putExtra("signup", true).addFlags(67108864));
+            WelcomeScreenActivity.this.startActivity(new Intent(WelcomeScreenActivity.this, MobileNumberActivity.class).putExtra("signup", true).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             WelcomeScreenActivity.this.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
             WelcomeScreenActivity.this.finish();
         }
@@ -271,7 +271,7 @@ public class WelcomeScreenActivity extends AppCompatActivity implements Connecti
         }
 
         public void onClick(View view) {
-            WelcomeScreenActivity.this.startActivity(new Intent(WelcomeScreenActivity.this, HomeActivity.class).addFlags(67108864));
+            WelcomeScreenActivity.this.startActivity(new Intent(WelcomeScreenActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             WelcomeScreenActivity.this.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
             WelcomeScreenActivity.this.finish();
         }

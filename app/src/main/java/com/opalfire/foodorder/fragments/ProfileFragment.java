@@ -6,6 +6,7 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -62,56 +63,65 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 public class ProfileFragment extends Fragment {
     private static final int REQUEST_LOCATION = 1450;
-    @BindView(2131296326)
-    TextView appVersion;
-    @BindView(2131296328)
-    ImageView arrowImage;
-    @BindView(2131296514)
-    RelativeLayout errorLayout;
-    @BindView(2131296624)
-    RelativeLayout listLayout;
-    @BindView(2131296631)
-    Button loginBtn;
-    @BindView(2131296633)
-    Button logout;
+
     GoogleApiClient mGoogleApiClient;
-    @BindView(2131296658)
-    LinearLayout myaccountLayout;
-    @BindView(2131296750)
-    ListView profileSettingLv;
-    @BindView(2131296893)
-    TextView textLine;
+
     TextView userEmail;
     ImageView userImage;
     TextView userName;
     TextView userPhone;
-    @BindView(2131296960)
+    @BindView(R.id.arrow_image)
+    ImageView arrowImage;
+    @BindView(R.id.text_line)
+    TextView textLine;
+    @BindView(R.id.view_line)
     View viewLine;
+    @BindView(R.id.myaccount_layout)
+    LinearLayout myaccountLayout;
+    @BindView(R.id.profile_setting_lv)
+    ListView profileSettingLv;
+    @BindView(R.id.list_layout)
+    RelativeLayout listLayout;
+    @BindView(R.id.logout)
+    Button logout;
+    @BindView(R.id.app_version)
+    TextView appVersion;
+    @BindView(R.id.login_btn)
+    Button loginBtn;
+    @BindView(R.id.error_layout)
+    RelativeLayout errorLayout;
+
     private Activity activity;
     private Context context;
     private ViewGroup toolbar;
     private View toolbarLayout;
+    private Unbinder unbinder;
 
     public static void expand(final View view) {
         view.measure(-1, -2);
         final int measuredHeight = view.getMeasuredHeight();
         view.getLayoutParams().height = 0;
         view.setVisibility(View.VISIBLE);
-        Animation c08525 = new Animation() {
+        Animation animation = new Animation() {
+            @Override
             public boolean willChangeBounds() {
                 return true;
             }
 
-            protected void applyTransformation(float f, Transformation transformation) {
-                view.getLayoutParams().height = f == 1.0f ? Float.NaN : (int) (((float) measuredHeight) * f);
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                super.applyTransformation(interpolatedTime, t);
+                view.getLayoutParams().height = interpolatedTime == 1.0f ? 0 : (int) (measuredHeight * interpolatedTime);
                 view.requestLayout();
             }
         };
-        c08525.setDuration((long) ((int) (((float) measuredHeight) / view.getContext().getResources().getDisplayMetrics().density)));
-        view.startAnimation(c08525);
+
+        animation.setDuration((long) ((int) (((float) measuredHeight) / view.getContext().getResources().getDisplayMetrics().density)));
+        view.startAnimation(animation);
     }
 
     public static void collapse(final View view) {
@@ -136,19 +146,19 @@ public class ProfileFragment extends Fragment {
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        this.context = getContext();
-        this.activity = getActivity();
+        context = getContext();
+        activity = getActivity();
     }
 
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.fragment_profile, viewGroup, false);
-        ButterKnife.bind((Object) this, inflate);
+        unbinder = ButterKnife.bind(this, inflate);
         return inflate;
     }
 
     public void onResume() {
         super.onResume();
-        HomeActivity.updateNotificationCount(this.context, GlobalData.notificationCount);
+        HomeActivity.updateNotificationCount(context, GlobalData.notificationCount);
         initView();
     }
 
@@ -158,35 +168,36 @@ public class ProfileFragment extends Fragment {
 
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.context = context;
+        context = context;
     }
 
     public void onDestroyView() {
         super.onDestroyView();
-        if (this.toolbar != null) {
-            this.toolbar.removeView(this.toolbarLayout);
+        if (toolbar != null) {
+            toolbar.removeView(toolbarLayout);
         }
+        unbinder.unbind();
     }
 
     private void openSettingPage(int i) {
         switch (i) {
             case 0:
-                startActivity(new Intent(this.context, ManageAddressActivity.class));
+                startActivity(new Intent(context, ManageAddressActivity.class));
                 break;
             case 1:
-                startActivity(new Intent(this.context, FavouritesActivity.class));
+                startActivity(new Intent(context, FavouritesActivity.class));
                 break;
             case 2:
-                startActivity(new Intent(this.context, AccountPaymentActivity.class).putExtra("is_show_wallet", true).putExtra("is_show_cash", false));
+                startActivity(new Intent(context, AccountPaymentActivity.class).putExtra("is_show_wallet", true).putExtra("is_show_cash", false));
                 break;
             case 3:
-                startActivity(new Intent(this.context, OrdersActivity.class));
+                startActivity(new Intent(context, OrdersActivity.class));
                 break;
             case 4:
-                startActivity(new Intent(this.context, PromotionActivity.class));
+                startActivity(new Intent(context, PromotionActivity.class));
                 break;
             case 5:
-                startActivity(new Intent(this.context, ChangePasswordActivity.class));
+                startActivity(new Intent(context, ChangePasswordActivity.class));
                 break;
             default:
                 break;
@@ -197,205 +208,182 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
         System.out.println("ProfileFragment");
-        this.toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
+        toolbar = getActivity().findViewById(R.id.toolbar);
         if (GlobalData.profileModel != null) {
-            this.toolbarLayout = LayoutInflater.from(this.context).inflate(R.layout.toolbar_profile, this.toolbar, false);
-            this.userImage = (ImageView) this.toolbarLayout.findViewById(R.id.user_image);
-            this.userName = (TextView) this.toolbarLayout.findViewById(R.id.user_name);
-            this.userPhone = (TextView) this.toolbarLayout.findViewById(R.id.user_phone);
-            this.userEmail = (TextView) this.toolbarLayout.findViewById(R.id.user_mail);
+            toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_profile, toolbar, false);
+            userImage = toolbarLayout.findViewById(R.id.user_image);
+            userName = toolbarLayout.findViewById(R.id.user_name);
+            userPhone = toolbarLayout.findViewById(R.id.user_phone);
+            userEmail = toolbarLayout.findViewById(R.id.user_mail);
             initView();
-            Button button = (Button) this.toolbarLayout.findViewById(R.id.edit);
-            this.userImage.setOnClickListener(new C08481());
+            Button button = toolbarLayout.findViewById(R.id.edit);
+            userImage.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(context, EditAccountActivity.class));
+                }
+            });
             button.setOnClickListener(new C08492());
-            this.toolbar.addView(this.toolbarLayout);
-            this.toolbar.setVisibility(View.VISIBLE);
-            this.errorLayout.setVisibility(View.GONE);
-            bundle = Arrays.asList(getResources().getStringArray(R.array.profile_settings));
-            List arrayList = new ArrayList();
-            arrayList.add(Integer.valueOf(R.drawable.home));
-            arrayList.add(Integer.valueOf(R.drawable.heart));
-            arrayList.add(Integer.valueOf(R.drawable.payment));
-            arrayList.add(Integer.valueOf(R.drawable.ic_myorders));
-            arrayList.add(Integer.valueOf(R.drawable.ic_promotion_details));
-            arrayList.add(Integer.valueOf(R.drawable.padlock));
-            this.profileSettingLv.setAdapter(new ProfileSettingsAdapter(this.context, bundle, arrayList));
-            ListViewSizeHelper.getListViewSize(this.profileSettingLv);
-            this.profileSettingLv.setOnItemClickListener(new C08503());
-            this.arrowImage.setTag(Boolean.valueOf(true));
-            HomeActivity.updateNotificationCount(this.context, GlobalData.notificationCount);
-            TextView textView = this.appVersion;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("App version ");
-            stringBuilder.append("1.0");
-            stringBuilder.append(" (");
-            stringBuilder.append(String.valueOf(1));
-            stringBuilder.append(")");
-            textView.setText(stringBuilder.toString());
+            toolbar.addView(toolbarLayout);
+            toolbar.setVisibility(View.VISIBLE);
+            errorLayout.setVisibility(View.GONE);
+            List<String> profileSettingArr = Arrays.asList(getResources().getStringArray(R.array.profile_settings));
+            List<Integer> arrayList = new ArrayList<>();
+            arrayList.add(R.drawable.home);
+            arrayList.add(R.drawable.heart);
+            arrayList.add(R.drawable.payment);
+            arrayList.add(R.drawable.ic_myorders);
+            arrayList.add(R.drawable.ic_promotion_details);
+            arrayList.add(R.drawable.padlock);
+            profileSettingLv.setAdapter(new ProfileSettingsAdapter(context, profileSettingArr, arrayList));
+            ListViewSizeHelper.getListViewSize(profileSettingLv);
+            profileSettingLv.setOnItemClickListener(new C08503());
+            arrowImage.setTag(Boolean.TRUE);
+            HomeActivity.updateNotificationCount(context, GlobalData.notificationCount);
+            TextView textView = appVersion;
+            String appVer = "App version " +
+                    "1.0" +
+                    " (" +
+                    1 +
+                    ")";
+            textView.setText(appVer);
             return;
         }
-        this.toolbar.setVisibility(View.GONE);
-        this.errorLayout.setVisibility(View.VISIBLE);
+        toolbar.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.VISIBLE);
     }
 
     private void changeLanguage() {
-        List asList = Arrays.asList(getResources().getStringArray(R.array.languages));
-        Builder builder = new Builder(getActivity());
+        List<String> asList = Arrays.asList(getResources().getStringArray(R.array.languages));
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View inflate = getLayoutInflater().inflate(R.layout.language_dialog, null);
         builder.setView(inflate);
         builder.setCancelable(true);
         builder.setTitle("Change Language");
-        final AlertDialog create = builder.create();
-        final ListView listView = (ListView) inflate.findViewById(R.id.lv);
-        listView.setAdapter(new ArrayAdapter(getActivity(), 17367055, asList));
+        final AlertDialog alertDialog = builder.create();
+        final ListView listView = inflate.findViewById(R.id.lv);
+        listView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.profile_settings_list_item, asList));
         listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
-                ProfileFragment.this.setLanguage(listView.getItemAtPosition(i).toString());
-                create.dismiss();
+                setLanguage(listView.getItemAtPosition(i).toString());
+                alertDialog.dismiss();
             }
         });
-        create.show();
+        alertDialog.show();
     }
 
     private void setLanguage(String str) {
         SharedHelper.putKey(getActivity(), "language", str);
-        int hashCode = str.hashCode();
-        if (hashCode != -347177772) {
-            if (hashCode != 60895824) {
-                if (hashCode == 1969163468) {
-                    if (str.equals("Arabic") != null) {
-                        str = true;
-                        switch (str) {
-                            case null:
-                                LocaleUtils.setLocale(getActivity(), "en");
-                                break;
-                            case 1:
-                                LocaleUtils.setLocale(getActivity(), "ar");
-                                break;
-                            case 2:
-                                LocaleUtils.setLocale(getActivity(), "es");
-                                break;
-                            default:
-                                LocaleUtils.setLocale(getActivity(), "en");
-                                break;
-                        }
-                        startActivity(new Intent(getActivity(), HomeActivity.class).addFlags(67108864).putExtra("change_language", true));
-                        getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                    }
-                }
-            } else if (str.equals("English") != null) {
-                str = null;
-                switch (str) {
-                    case null:
-                        LocaleUtils.setLocale(getActivity(), "en");
-                        break;
-                    case 1:
-                        LocaleUtils.setLocale(getActivity(), "ar");
-                        break;
-                    case 2:
-                        LocaleUtils.setLocale(getActivity(), "es");
-                        break;
-                    default:
-                        LocaleUtils.setLocale(getActivity(), "en");
-                        break;
-                }
-                startActivity(new Intent(getActivity(), HomeActivity.class).addFlags(67108864).putExtra("change_language", true));
-                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            }
-        } else if (str.equals("Spanish") != null) {
-            str = 2;
-            switch (str) {
-                case null:
-                    LocaleUtils.setLocale(getActivity(), "en");
-                    break;
-                case 1:
-                    LocaleUtils.setLocale(getActivity(), "ar");
-                    break;
-                case 2:
-                    LocaleUtils.setLocale(getActivity(), "es");
-                    break;
-                default:
-                    LocaleUtils.setLocale(getActivity(), "en");
-                    break;
-            }
-            startActivity(new Intent(getActivity(), HomeActivity.class).addFlags(67108864).putExtra("change_language", true));
-            getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        }
-        str = -1;
         switch (str) {
-            case null:
-                LocaleUtils.setLocale(getActivity(), "en");
-                break;
-            case 1:
+            case "Arabic":
                 LocaleUtils.setLocale(getActivity(), "ar");
                 break;
-            case 2:
+            case "English":
+                LocaleUtils.setLocale(getActivity(), "en");
+                break;
+            case "Spanish":
                 LocaleUtils.setLocale(getActivity(), "es");
                 break;
             default:
                 LocaleUtils.setLocale(getActivity(), "en");
                 break;
         }
-        startActivity(new Intent(getActivity(), HomeActivity.class).addFlags(67108864).putExtra("change_language", true));
+        startActivity(new Intent(getActivity(), HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra("change_language", true));
         getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private void initView() {
         if (GlobalData.profileModel != null) {
-            Glide.with(this.context).load(GlobalData.profileModel.getAvatar()).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).placeholder((int) R.drawable.man).error((int) R.drawable.man)).into(this.userImage);
-            this.userPhone.setText(GlobalData.profileModel.getPhone());
-            this.userName.setText(GlobalData.profileModel.getName());
-            TextView textView = this.userEmail;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(" - ");
-            stringBuilder.append(GlobalData.profileModel.getEmail());
-            textView.setText(stringBuilder.toString());
+            Glide.with(context).load(GlobalData.profileModel.getAvatar()).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.man).error(R.drawable.man)).into(userImage);
+            userPhone.setText(GlobalData.profileModel.getPhone());
+            userName.setText(GlobalData.profileModel.getName());
+            String userEmailStr = " - " +
+                    GlobalData.profileModel.getEmail();
+            userEmail.setText(userEmailStr);
         }
     }
 
-    @OnClick({2131296328, 2131296633, 2131296658, 2131296631})
+    @OnClick({R.id.login_btn, R.id.logout, R.id.myaccount_layout, R.id.login_btn})
     public void onViewClicked(View view) {
-        view = view.getId();
-        if (view == R.id.login_btn) {
-            SharedHelper.putKey(this.context, "logged", "false");
-            startActivity(new Intent(this.context, LoginActivity.class).addFlags(67108864));
+        if (view.getId() == R.id.login_btn) {
+            SharedHelper.putKey(context, "logged", "false");
+            startActivity(new Intent(context, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             getActivity().finish();
-        } else if (view == R.id.logout) {
+        } else if (view.getId() == R.id.logout) {
             alertDialog();
-        } else if (view == R.id.myaccount_layout) {
-            if (this.arrowImage.getTag().equals(Boolean.valueOf(true)) != null) {
-                this.arrowImage.animate().setDuration(500).rotation(180.0f).start();
-                this.arrowImage.setTag(Boolean.valueOf(false));
-                collapse(this.listLayout);
-                this.viewLine.setVisibility(View.VISIBLE);
-                this.textLine.setVisibility(View.GONE);
+        } else if (view.getId() == R.id.myaccount_layout) {
+            if (arrowImage.getTag().equals(Boolean.TRUE)) {
+                arrowImage.animate().setDuration(500).rotation(180.0f).start();
+                arrowImage.setTag(Boolean.FALSE);
+                collapse(listLayout);
+                viewLine.setVisibility(View.VISIBLE);
+                textLine.setVisibility(View.GONE);
                 return;
             }
-            this.arrowImage.animate().setDuration(500).rotation(360.0f).start();
-            this.arrowImage.setTag(Boolean.valueOf(true));
-            this.viewLine.setVisibility(View.GONE);
-            this.textLine.setVisibility(View.VISIBLE);
-            expand(this.listLayout);
+            arrowImage.animate().setDuration(500).rotation(360.0f).start();
+            arrowImage.setTag(Boolean.TRUE);
+            viewLine.setVisibility(View.GONE);
+            textLine.setVisibility(View.VISIBLE);
+            expand(listLayout);
         }
     }
 
     private void signOut() {
-        this.mGoogleApiClient = new GoogleApiClient.Builder(getActivity()).addApi(Auth.GOOGLE_SIGN_IN_API, new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()).build();
-        this.mGoogleApiClient.connect();
-        this.mGoogleApiClient.registerConnectionCallbacks(new C14057());
+        GoogleSignInOptions localGoogleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity()).addApi(Auth.GOOGLE_SIGN_IN_API, localGoogleSignInOptions).build();
+        mGoogleApiClient.connect();
+        mGoogleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+            public void onConnected(@Nullable Bundle paramAnonymousBundle) {
+                if (mGoogleApiClient.isConnected()) {
+                    Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(@NonNull Status paramAnonymous2Status) {
+                            if (paramAnonymous2Status.isSuccess()) {
+                                Log.d("MainAct", "Google User Logged out");
+                            }
+                        }
+                    });
+                }
+            }
+
+            public void onConnectionSuspended(int paramAnonymousInt) {
+                Log.d("MAin", "Google API Client Connection Suspended");
+            }
+        });
     }
 
     public void alertDialog() {
-        Builder builder = new Builder(this.context);
-        builder.setMessage("Are you sure you want to logout?").setPositiveButton(getResources().getString(R.string.logout), new C08559()).setNegativeButton(getResources().getString(R.string.cancel), new C08548());
-        AlertDialog create = builder.create();
-        create.show();
-        Button button = create.getButton(-2);
-        button.setTextColor(ContextCompat.getColor(this.context, R.color.theme));
-        button.setTypeface(button.getTypeface(), 1);
-        Button button2 = create.getButton(-1);
-        button2.setTextColor(ContextCompat.getColor(this.context, R.color.theme));
-        button2.setTypeface(button2.getTypeface(), 1);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Are you sure you want to logout?").setPositiveButton(getResources().getString(R.string.logout), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (SharedHelper.getKey(context, "login_by").equals("facebook")) {
+                    LoginManager.getInstance().logOut();
+                }
+                if (SharedHelper.getKey(context, "login_by").equals("google")) {
+                    signOut();
+                }
+                SharedHelper.putKey(context, "logged", "false");
+                startActivity(new Intent(context, WelcomeScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                GlobalData.profileModel = null;
+                GlobalData.addCart = null;
+                GlobalData.notificationCount = 0;
+                getActivity().finish();
+            }
+        }).setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        Button button = alertDialog.getButton(-2);
+        button.setTextColor(ContextCompat.getColor(context, R.color.theme));
+        button.setTypeface(button.getTypeface(), Typeface.BOLD);
+        Button button2 = alertDialog.getButton(-1);
+        button2.setTextColor(ContextCompat.getColor(context, R.color.theme));
+        button2.setTypeface(button2.getTypeface(), Typeface.BOLD);
     }
 
     /* renamed from: com.entriver.orderaround.fragments.ProfileFragment$1 */
@@ -404,7 +392,7 @@ public class ProfileFragment extends Fragment {
         }
 
         public void onClick(View view) {
-            ProfileFragment.this.startActivity(new Intent(ProfileFragment.this.context, EditAccountActivity.class));
+            startActivity(new Intent(context, EditAccountActivity.class));
         }
     }
 
@@ -414,7 +402,7 @@ public class ProfileFragment extends Fragment {
         }
 
         public void onClick(View view) {
-            ProfileFragment.this.startActivity(new Intent(ProfileFragment.this.context, EditAccountActivity.class));
+            startActivity(new Intent(context, EditAccountActivity.class));
         }
     }
 
@@ -424,67 +412,8 @@ public class ProfileFragment extends Fragment {
         }
 
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
-            ProfileFragment.this.openSettingPage(i);
+            openSettingPage(i);
         }
     }
 
-    /* renamed from: com.entriver.orderaround.fragments.ProfileFragment$8 */
-    class C08548 implements DialogInterface.OnClickListener {
-        C08548() {
-        }
-
-        public void onClick(DialogInterface dialogInterface, int i) {
-            dialogInterface.dismiss();
-        }
-    }
-
-    /* renamed from: com.entriver.orderaround.fragments.ProfileFragment$9 */
-    class C08559 implements DialogInterface.OnClickListener {
-        C08559() {
-        }
-
-        public void onClick(DialogInterface dialogInterface, int i) {
-            if (SharedHelper.getKey(ProfileFragment.this.context, "login_by").equals("facebook") != null) {
-                LoginManager.getInstance().logOut();
-            }
-            if (SharedHelper.getKey(ProfileFragment.this.context, "login_by").equals("google") != null) {
-                ProfileFragment.this.signOut();
-            }
-            SharedHelper.putKey(ProfileFragment.this.context, "logged", "false");
-            ProfileFragment.this.startActivity(new Intent(ProfileFragment.this.context, WelcomeScreenActivity.class).addFlags(67108864));
-            GlobalData.profileModel = null;
-            GlobalData.addCart = null;
-            GlobalData.notificationCount = null;
-            ProfileFragment.this.getActivity().finish();
-        }
-    }
-
-    /* renamed from: com.entriver.orderaround.fragments.ProfileFragment$7 */
-    class C14057 implements ConnectionCallbacks {
-
-        C14057() {
-        }
-
-        public void onConnected(@Nullable Bundle bundle) {
-            if (ProfileFragment.this.mGoogleApiClient.isConnected() != null) {
-                Auth.GoogleSignInApi.signOut(ProfileFragment.this.mGoogleApiClient).setResultCallback(new C14041());
-            }
-        }
-
-        public void onConnectionSuspended(int i) {
-            Log.d("MAin", "Google API Client Connection Suspended");
-        }
-
-        /* renamed from: com.entriver.orderaround.fragments.ProfileFragment$7$1 */
-        class C14041 implements ResultCallback<Status> {
-            C14041() {
-            }
-
-            public void onResult(@NonNull Status status) {
-                if (status.isSuccess() != null) {
-                    Log.d("MainAct", "Google User Logged out");
-                }
-            }
-        }
-    }
 }

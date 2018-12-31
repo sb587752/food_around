@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="array_dot_active">
+        <item>@color/grey</item>
+        <item>@color/grey</item>
+        <item>@color/grey</item>
+    </array>
+    <array name="array_dot_inactive">
+        <item>@color/light_grey</item>
+        <item>@color/light_grey</item>
+        <item>@color/light_grey</item>
+    </array>
+    <string-array name="languages">
+        <item>English</item>
+        <item>Arabic</item>
+    </string-array>
+    <string-array name="profile_settings">
+        <item>Manage Address</item>
+        <item>Favorites</item>
+        <item>Payment</item>
+        <item>My Orders</item>
+        <item>Promotion Details</item>
+        <item>Change Password</item>
+    </string-array>
+</resources>

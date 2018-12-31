@@ -1,6 +1,8 @@
 package com.opalfire.foodorder.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,27 +22,30 @@ import butterknife.Unbinder;
 
 public class ProductSearchFragment extends Fragment {
     public static ProductsAdapter productsAdapter;
-    @BindView(2131296746)
-    RecyclerView productRv;
-    Unbinder unbinder;
 
-    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        View inflate = layoutInflater.inflate(R.layout.fragment_product_search, viewGroup, false);
-        this.unbinder = ButterKnife.bind((Object) this, inflate);
-        return inflate;
+    Unbinder unbinder;
+    @BindView(R.id.product_rv)
+    RecyclerView productRv;
+    private Context mContext;
+
+    public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        View view = layoutInflater.inflate(R.layout.fragment_product_search, viewGroup, false);
+        unbinder = ButterKnife.bind(this, view);
+        mContext=view.getContext();
+        return view;
     }
 
     public void onDestroyView() {
         super.onDestroyView();
-        this.unbinder.unbind();
+        unbinder.unbind();
     }
 
     public void onActivityCreated(@Nullable Bundle bundle) {
         super.onActivityCreated(bundle);
-        productsAdapter = new ProductsAdapter(getActivity(), getActivity(), GlobalData.searchProductList);
-        this.productRv.setLayoutManager(new LinearLayoutManager(getActivity(), 1, false));
-        this.productRv.setItemAnimator(new DefaultItemAnimator());
-        this.productRv.setAdapter(productsAdapter);
+        productsAdapter = new ProductsAdapter(mContext, getActivity(), GlobalData.searchProductList);
+        productRv.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        productRv.setItemAnimator(new DefaultItemAnimator());
+        productRv.setAdapter(productsAdapter);
     }
 
     public void onResume() {

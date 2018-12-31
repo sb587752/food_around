@@ -16,27 +16,27 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class OrderViewFragment extends Fragment {
-    @BindView(2131296880)
-    TabLayout tabLayout;
+
     Unbinder unbinder;
-    @BindView(2131296962)
-    View viewLine4;
-    @BindView(2131296964)
+    @BindView(R.id.tabLayout)
+    TabLayout tabLayout;
+    @BindView(R.id.view_pager)
     ViewPager viewPager;
+
 
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.fragment_order_view, viewGroup, false);
-        this.unbinder = ButterKnife.bind((Object) this, inflate);
-        viewGroup = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
-        viewGroup.addFragment(new OrderDetailFragment(), "DETAILS");
-        viewGroup.addFragment(new OrderHelpFragment(), "HELP");
-        this.viewPager.setAdapter(viewGroup);
-        this.tabLayout.setupWithViewPager(this.viewPager);
+        unbinder = ButterKnife.bind((Object) this, inflate);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
+        viewPagerAdapter.addFragment(new OrderDetailFragment(), "DETAILS");
+        viewPagerAdapter.addFragment(new OrderHelpFragment(), "HELP");
+        viewPager.setAdapter(viewPagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
         return inflate;
     }
 
     public void onDestroyView() {
         super.onDestroyView();
-        this.unbinder.unbind();
+        unbinder.unbind();
     }
 }

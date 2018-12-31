@@ -1,4 +1,4 @@
-package com.opalfire.foodorder.fragments;
+package com.opalfire.orderaround.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,20 +25,24 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.opalfire.foodorder.R;
-import com.opalfire.foodorder.activities.OtherHelpActivity;
-import com.opalfire.foodorder.activities.SplashActivity;
-import com.opalfire.foodorder.adapter.DisputeMessageAdapter;
-import com.opalfire.foodorder.build.api.ApiClient;
-import com.opalfire.foodorder.build.api.ApiInterface;
-import com.opalfire.foodorder.helper.CustomDialog;
-import com.opalfire.foodorder.helper.GlobalData;
-import com.opalfire.foodorder.models.Order;
+import com.opalfire.orderaround.R;
+import com.opalfire.orderaround.activities.OtherHelpActivity;
+import com.opalfire.orderaround.activities.SplashActivity;
+import com.opalfire.orderaround.adapter.DisputeMessageAdapter;
+import com.opalfire.orderaround.build.api.ApiClient;
+import com.opalfire.orderaround.build.api.ApiInterface;
+import com.opalfire.orderaround.helper.CustomDialog;
+import com.opalfire.orderaround.helper.GlobalData;
+import com.opalfire.orderaround.models.Order;
+import com.opalfire.orderaround.models.Search;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import butterknife.BindView;
@@ -50,49 +54,50 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class OrderHelpFragment extends Fragment {
-    Integer DISPUTE_HELP_ID = Integer.valueOf(View.VISIBLE);
+    Integer DISPUTE_HELP_ID = View.VISIBLE;
     int DISPUTE_ID = 0;
-    ApiInterface apiInterface = ((ApiInterface) ApiClient.getRetrofit().create(ApiInterface.class));
-    @BindView(2131296409)
-    Button chatUs;
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     Context context;
     String currency = "";
     CustomDialog customDialog;
-    @BindView(2131296489)
-    Button dispute;
     DisputeMessageAdapter disputeMessageAdapter;
-    String disputeType;
-    @BindView(2131296579)
-    RecyclerView helpRv;
     int itemQuantity = 0;
-    @BindView(2131296705)
-    LinearLayout otherHelpLayout;
-    Double priceAmount = Double.valueOf(0.0d);
+    Double priceAmount = 0.0d;
     String reason = "OTHERS";
     Unbinder unbinder;
+    @BindView(R.id.help_rv)
+    RecyclerView helpRv;
+    @BindView(R.id.reason_description)
+    TextView reasonDescription;
+    @BindView(R.id.dispute)
+    Button dispute;
+    @BindView(R.id.chat_us)
+    Button chatUs;
+    @BindView(R.id.other_help_layout)
+    LinearLayout otherHelpLayout;
 
     public void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
-        this.context = getContext();
+        context = getContext();
     }
 
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.fragment_order_help, viewGroup, false);
-        this.unbinder = ButterKnife.bind((Object) this, inflate);
-        this.customDialog = new CustomDialog(this.context);
+        unbinder = ButterKnife.bind(this, inflate);
+        customDialog = new CustomDialog(context);
         if (GlobalData.disputeMessageList != null) {
-            this.helpRv.setLayoutManager(new LinearLayoutManager(this.context, 1, false));
-            this.helpRv.setItemAnimator(new DefaultItemAnimator());
-            this.helpRv.setHasFixedSize(true);
-            this.disputeMessageAdapter = new DisputeMessageAdapter(GlobalData.disputeMessageList, this.context, getActivity());
-            this.helpRv.setAdapter(this.disputeMessageAdapter);
-            if (GlobalData.disputeMessageList.size() > null) {
-                this.otherHelpLayout.setVisibility(View.GONE);
+            helpRv.setLayoutManager(new LinearLayoutManager(context, 1, false));
+            helpRv.setItemAnimator(new DefaultItemAnimator());
+            helpRv.setHasFixedSize(true);
+            disputeMessageAdapter = new DisputeMessageAdapter(GlobalData.disputeMessageList, context, getActivity());
+            helpRv.setAdapter(disputeMessageAdapter);
+            if (GlobalData.disputeMessageList.size() > 0) {
+                otherHelpLayout.setVisibility(View.GONE);
             } else {
-                this.otherHelpLayout.setVisibility(View.VISIBLE);
+                otherHelpLayout.setVisibility(View.VISIBLE);
             }
         } else {
-            startActivity(new Intent(this.context, SplashActivity.class));
+            startActivity(new Intent(context, SplashActivity.class));
             getActivity().finish();
         }
         return inflate;
@@ -100,108 +105,105 @@ public class OrderHelpFragment extends Fragment {
 
     public void onDestroyView() {
         super.onDestroyView();
-        this.unbinder.unbind();
+        unbinder.unbind();
     }
 
     private void showDialog() {
         final String[] strArr = new String[]{"COMPLAINED", "CANCELED", "REFUND"};
-        this.disputeType = "COMPLAINED";
-        Builder builder = new Builder(getActivity());
-        View inflate = getLayoutInflater().inflate(R.layout.dispute_dialog, null);
-        builder.setView(inflate);
-        final EditText editText = (EditText) inflate.findViewById(R.id.reason_edit);
-        Spinner spinner = (Spinner) inflate.findViewById(R.id.dispute_type);
-        SpinnerAdapter arrayAdapter = new ArrayAdapter(getActivity(), 17367048, strArr);
-        arrayAdapter.setDropDownViewResource(17367049);
+        final String[] disputeType = {"COMPLAINED"};
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        View dialogView = getLayoutInflater().inflate(R.layout.dispute_dialog, null);
+        dialogBuilder.setView(dialogView);
+        final EditText editText = dialogView.findViewById(R.id.reason_edit);
+        Spinner spinner = dialogView.findViewById(R.id.dispute_type);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_layout, strArr);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinner.setAdapter(arrayAdapter);
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
 
+            @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long j) {
-                OrderHelpFragment.this.disputeType = strArr[i];
+                disputeType[0] = strArr[i];
             }
         });
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("ORDER #000");
-        stringBuilder.append(GlobalData.isSelectedOrder.getId().toString());
-        builder.setTitle(stringBuilder.toString());
-        builder.setMessage(this.reason);
-        builder.setPositiveButton((CharSequence) "Submit", null);
-        builder.setNegativeButton((CharSequence) "Cancel", new C08452());
-        final AlertDialog create = builder.create();
-        create.setCancelable(false);
-        create.setOnShowListener(new OnShowListener() {
+        final AlertDialog alertDialog = dialogBuilder.create();
+        dialogBuilder.setTitle("ORDER #000" +
+                GlobalData.isSelectedOrder.getId().toString());
+        dialogBuilder.setMessage(reason);
+        dialogBuilder.setPositiveButton("Submit", null);
+        dialogBuilder.setNegativeButton("Cancel", new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                alertDialog.dismiss();
+            }
+        });
+        dialogBuilder.setCancelable(false);
+        alertDialog.setOnShowListener(new OnShowListener() {
+            @Override
             public void onShow(final DialogInterface dialogInterface) {
-                create.getButton(-1).setOnClickListener(new View.OnClickListener() {
+                alertDialog.getButton(-1).setOnClickListener(new View.OnClickListener() {
+                    @Override
                     public void onClick(View view) {
-                        if (editText.getText().toString().equalsIgnoreCase("") != null) {
-                            Toast.makeText(OrderHelpFragment.this.context, "Please enter reason", 0).show();
+                        if (!editText.getText().toString().equalsIgnoreCase("")) {
+                            Toast.makeText(context, "Please enter reason", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         dialogInterface.dismiss();
-                        view = new HashMap();
-                        view.put("order_id", GlobalData.isSelectedOrder.getId().toString());
-                        view.put("status", "CREATED");
-                        view.put("description", editText.getText().toString());
-                        view.put("dispute_type", OrderHelpFragment.this.disputeType);
-                        view.put("created_by", "user");
-                        view.put("created_to", "user");
-                        OrderHelpFragment.this.postDispute(view);
+                        HashMap<String, String> sdfa = new HashMap<>();
+                        sdfa.put("order_id", GlobalData.isSelectedOrder.getId().toString());
+                        sdfa.put("status", "CREATED");
+                        sdfa.put("description", editText.getText().toString());
+                        sdfa.put("dispute_type", disputeType[0]);
+                        sdfa.put("created_by", "user");
+                        sdfa.put("created_to", "user");
+                        postDispute(sdfa);
                     }
                 });
             }
         });
-        create.show();
+
+        alertDialog.show();
     }
 
     private void postDispute(HashMap<String, String> hashMap) {
-        this.customDialog.show();
-        this.apiInterface.postDispute(hashMap).enqueue(new C14014());
+        customDialog.show();
+        apiInterface.postDispute(hashMap).enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                customDialog.dismiss();
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "Dispute create successfully", Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                    return;
+                }
+                try {
+                    Toast.makeText(context, new JSONObject(response.errorBody().string()).optString("message"), Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                customDialog.dismiss();
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    @OnClick({2131296409, 2131296489})
+    @OnClick({R.id.chat_us, R.id.dispute})
     public void onViewClicked(View view) {
-        view = view.getId();
-        if (view == R.id.chat_us) {
+        if (view.getId() == R.id.chat_us) {
             startActivity(new Intent(getActivity(), OtherHelpActivity.class).putExtra("is_chat", true));
-        } else if (view == R.id.dispute) {
+        } else if (view.getId() == R.id.dispute) {
             showDialog();
         }
     }
 
-    /* renamed from: com.entriver.orderaround.fragments.OrderHelpFragment$2 */
-    class C08452 implements OnClickListener {
-        C08452() {
-        }
-
-        public void onClick(DialogInterface dialogInterface, int i) {
-            dialogInterface.dismiss();
-        }
-    }
-
-    /* renamed from: com.entriver.orderaround.fragments.OrderHelpFragment$4 */
-    class C14014 implements Callback<Order> {
-        C14014() {
-        }
-
-        public void onResponse(@NonNull Call<Order> call, @NonNull Response<Order> response) {
-            OrderHelpFragment.this.customDialog.dismiss();
-            if (response.isSuccessful() != null) {
-                Toast.makeText(OrderHelpFragment.this.context, "Dispute create successfully", 0).show();
-                OrderHelpFragment.this.getActivity().finish();
-                return;
-            }
-            try {
-                Toast.makeText(OrderHelpFragment.this.context, new JSONObject(response.errorBody().string()).optString("message"), 1).show();
-            } catch (Response<Order> response2) {
-                Toast.makeText(OrderHelpFragment.this.context, response2.getMessage(), 1).show();
-            }
-        }
-
-        public void onFailure(@NonNull Call<Order> call, @NonNull Throwable th) {
-            OrderHelpFragment.this.customDialog.dismiss();
-            Toast.makeText(OrderHelpFragment.this.context, "Something went wrong", 0).show();
-        }
-    }
 }

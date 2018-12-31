@@ -717,6 +717,8 @@
     <dimen name="_minus8sdp">-8dp</dimen>
     <dimen name="_minus9sdp">-9dp</dimen>
     <dimen name="botttom_bar_size">45dp</dimen>
+    <dimen name="cp_dialog_width">300dp</dimen>
+    <dimen name="cp_dialog_height">400dp</dimen>
 
 
 </resources>

@@ -249,7 +249,7 @@ Error: java.lang.NullPointerException
 
         public void run() {
             if (!SharedHelper.getKey(SplashActivity.this.context, "logged").equalsIgnoreCase(ServerProtocol.DIALOG_RETURN_SCOPES_TRUE) || SharedHelper.getKey(SplashActivity.this.context, "logged") == null) {
-                SplashActivity.this.startActivity(new Intent(SplashActivity.this, WelcomeScreenActivity.class).addFlags(67108864));
+                SplashActivity.this.startActivity(new Intent(SplashActivity.this, WelcomeScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 SplashActivity.this.finish();
                 return;
             }
@@ -278,7 +278,7 @@ Error: java.lang.NullPointerException
                 if (!(GlobalData.addCart.getProductList() == null || GlobalData.addCart.getProductList().size() == null)) {
                     GlobalData.addCartShopId = ((Cart) GlobalData.addCart.getProductList().get(null)).getProduct().getShopId().intValue();
                 }
-                SplashActivity.this.startActivity(new Intent(SplashActivity.this.context, HomeActivity.class).addFlags(67108864));
+                SplashActivity.this.startActivity(new Intent(SplashActivity.this.context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 SplashActivity.this.finish();
                 return;
             }
