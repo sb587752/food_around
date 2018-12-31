@@ -304,7 +304,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<ViewHold
                 }
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.HotelCatagoeryAdapter$3$1 */
+            /* renamed from: com.entriver.foodorder.adapter.HotelCatagoeryAdapter$3$1 */
             class C07931 implements Runnable {
                 C07931() {
                 }
@@ -408,7 +408,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<ViewHold
                 }
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.HotelCatagoeryAdapter$4$1 */
+            /* renamed from: com.entriver.foodorder.adapter.HotelCatagoeryAdapter$4$1 */
             class C07951 implements Runnable {
                 C07951() {
                 }
@@ -421,7 +421,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<ViewHold
                 }
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.HotelCatagoeryAdapter$4$2 */
+            /* renamed from: com.entriver.foodorder.adapter.HotelCatagoeryAdapter$4$2 */
             class C07962 implements DialogInterface.OnClickListener {
                 C07962() {
                 }
@@ -431,7 +431,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<ViewHold
                 }
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.HotelCatagoeryAdapter$4$3 */
+            /* renamed from: com.entriver.foodorder.adapter.HotelCatagoeryAdapter$4$3 */
             class C07973 implements DialogInterface.OnClickListener {
                 C07973() {
                 }
@@ -487,7 +487,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<ViewHold
                 }
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.HotelCatagoeryAdapter$5$1 */
+            /* renamed from: com.entriver.foodorder.adapter.HotelCatagoeryAdapter$5$1 */
             class C07991 implements Runnable {
                 C07991() {
                 }
@@ -500,7 +500,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<ViewHold
                 }
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.HotelCatagoeryAdapter$5$2 */
+            /* renamed from: com.entriver.foodorder.adapter.HotelCatagoeryAdapter$5$2 */
             class C08002 implements DialogInterface.OnClickListener {
                 C08002() {
                 }
@@ -510,7 +510,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<ViewHold
                 }
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.HotelCatagoeryAdapter$5$3 */
+            /* renamed from: com.entriver.foodorder.adapter.HotelCatagoeryAdapter$5$3 */
             class C08013 implements DialogInterface.OnClickListener {
                 C08013() {
                 }
@@ -543,7 +543,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<ViewHold
         apiInterface.clearCart().enqueue(new C13796());
     }
 
-    /* renamed from: com.entriver.orderaround.adapter.HotelCatagoeryAdapter$7 */
+    /* renamed from: com.entriver.foodorder.adapter.HotelCatagoeryAdapter$7 */
     static class C13807 implements Callback<AddCart> {
         C13807() {
         }
@@ -585,7 +585,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<ViewHold
         }
     }
 
-    /* renamed from: com.entriver.orderaround.adapter.HotelCatagoeryAdapter$8 */
+    /* renamed from: com.entriver.foodorder.adapter.HotelCatagoeryAdapter$8 */
     static class C13818 implements Callback<ShopDetail> {
         C13818() {
         }
@@ -611,7 +611,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<ViewHold
         }
     }
 
-    /* renamed from: com.entriver.orderaround.adapter.HotelCatagoeryAdapter$6 */
+    /* renamed from: com.entriver.foodorder.adapter.HotelCatagoeryAdapter$6 */
     class C13796 implements Callback<ClearCart> {
         C13796() {
         }

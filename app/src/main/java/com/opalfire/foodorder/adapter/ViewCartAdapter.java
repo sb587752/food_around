@@ -197,7 +197,7 @@ public class ViewCartAdapter extends Adapter<MyViewHolder> {
                 CartChoiceModeFragment.isSearch = false;
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.ViewCartAdapter$1$1 */
+            /* renamed from: com.entriver.foodorder.adapter.ViewCartAdapter$1$1 */
             class C08291 implements Runnable {
                 C08291() {
                 }
@@ -305,7 +305,7 @@ public class ViewCartAdapter extends Adapter<MyViewHolder> {
                 ViewCartAdapter.addCart(hashMap);
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.ViewCartAdapter$2$1 */
+            /* renamed from: com.entriver.foodorder.adapter.ViewCartAdapter$2$1 */
             class C08311 implements Runnable {
                 C08311() {
                 }
@@ -336,7 +336,7 @@ public class ViewCartAdapter extends Adapter<MyViewHolder> {
                 AddonBottomSheetFragment.selectedCart = (Cart) ViewCartAdapter.this.list.get(i);
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.ViewCartAdapter$3$1 */
+            /* renamed from: com.entriver.foodorder.adapter.ViewCartAdapter$3$1 */
             class C08331 implements Runnable {
                 C08331() {
                 }
@@ -355,7 +355,7 @@ public class ViewCartAdapter extends Adapter<MyViewHolder> {
         return this.list.size();
     }
 
-    /* renamed from: com.entriver.orderaround.adapter.ViewCartAdapter$4 */
+    /* renamed from: com.entriver.foodorder.adapter.ViewCartAdapter$4 */
     static class C13864 implements Callback<AddCart> {
         C13864() {
         }

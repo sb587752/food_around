@@ -1,39 +1,29 @@
-package com.opalfire.orderaround.activities;
+package com.opalfire.foodorder.activities;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.AsyncTask;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.os.StrictMode.ThreadPolicy.Builder;
-import android.provider.Settings.Secure;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog.Builder;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -44,54 +34,51 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.foodorder.user.CountryPicker.Country;
+import com.foodorder.user.CountryPicker.CountryPicker;
+import com.foodorder.user.CountryPicker.CountryPickerListener;
+import com.foodorder.user.HomeActivity;
+import com.foodorder.user.build.api.ApiClient;
+import com.foodorder.user.build.api.ApiInterface;
+import com.foodorder.user.build.configure.BuildConfigure;
+import com.foodorder.user.helper.ConnectionHelper;
+import com.foodorder.user.helper.CustomDialog;
+import com.foodorder.user.helper.GlobalData;
+import com.foodorder.user.helper.SharedHelper;
+import com.foodorder.user.models.AddCart;
+import com.foodorder.user.models.AddressList;
+import com.foodorder.user.models.LoginModel;
+import com.foodorder.user.models.User;
+import com.foodorder.user.utils.TextUtils;
+import com.foodorder.user.utils.Utils;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInApi;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions.Builder;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.Builder;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.orderaround.user.CountryPicker.Country;
-import com.orderaround.user.CountryPicker.CountryPicker;
-import com.orderaround.user.CountryPicker.CountryPickerListener;
-import com.orderaround.user.HomeActivity;
-import com.orderaround.user.build.api.ApiClient;
-import com.orderaround.user.build.api.ApiInterface;
-import com.orderaround.user.build.configure.BuildConfigure;
-import com.orderaround.user.helper.ConnectionHelper;
-import com.orderaround.user.helper.CustomDialog;
-import com.orderaround.user.helper.GlobalData;
-import com.orderaround.user.helper.SharedHelper;
-import com.orderaround.user.models.AddCart;
-import com.orderaround.user.models.AddressList;
-import com.orderaround.user.models.LoginModel;
-import com.orderaround.user.models.User;
-import com.orderaround.user.utils.TextUtils;
-import com.orderaround.user.utils.Utils;
+
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import okhttp3.ResponseBody;
-import org.json.JSONObject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LoginActivity
@@ -667,8 +654,3 @@ public class LoginActivity
   }
 }
 
-
-/* Location:              C:\APK Extractor\Order_Around-dex2jar.jar!\com\orderaround\user\activities\LoginActivity.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

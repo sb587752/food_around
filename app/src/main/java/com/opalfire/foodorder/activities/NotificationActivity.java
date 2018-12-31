@@ -56,7 +56,7 @@ public class NotificationActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(context));
     }
 
-    /* renamed from: com.entriver.orderaround.activities.NotificationActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.NotificationActivity$1 */
     class C07441 implements OnClickListener {
         C07441() {
         }

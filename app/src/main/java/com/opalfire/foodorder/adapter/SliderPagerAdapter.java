@@ -51,7 +51,7 @@ public class SliderPagerAdapter extends PagerAdapter {
         viewGroup.removeView((View) obj);
     }
 
-    /* renamed from: com.entriver.orderaround.adapter.SliderPagerAdapter$1 */
+    /* renamed from: com.entriver.foodorder.adapter.SliderPagerAdapter$1 */
     class C08281 implements OnClickListener {
         C08281() {
         }

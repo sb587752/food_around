@@ -1,4 +1,4 @@
-package com.opalfire.orderaround.Pubnub;
+package com.opalfire.foodorder.Pubnub;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

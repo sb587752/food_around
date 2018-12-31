@@ -1,4 +1,4 @@
-package com.opalfire.orderaround.fragments;
+package com.opalfire.foodorder.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -6,11 +6,9 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AlertDialog.Builder;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,20 +22,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.opalfire.orderaround.R;
-import com.opalfire.orderaround.activities.OtherHelpActivity;
-import com.opalfire.orderaround.activities.SplashActivity;
-import com.opalfire.orderaround.adapter.DisputeMessageAdapter;
-import com.opalfire.orderaround.build.api.ApiClient;
-import com.opalfire.orderaround.build.api.ApiInterface;
-import com.opalfire.orderaround.helper.CustomDialog;
-import com.opalfire.orderaround.helper.GlobalData;
-import com.opalfire.orderaround.models.Order;
-import com.opalfire.orderaround.models.Search;
+import com.opalfire.foodorder.R;
+import com.opalfire.foodorder.activities.OtherHelpActivity;
+import com.opalfire.foodorder.activities.SplashActivity;
+import com.opalfire.foodorder.adapter.DisputeMessageAdapter;
+import com.opalfire.foodorder.build.api.ApiClient;
+import com.opalfire.foodorder.build.api.ApiInterface;
+import com.opalfire.foodorder.helper.CustomDialog;
+import com.opalfire.foodorder.helper.GlobalData;
+import com.opalfire.foodorder.models.Order;
 
 import org.json.JSONException;
 import org.json.JSONObject;

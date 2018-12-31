@@ -1,7 +1,7 @@
-package com.opalfire.orderaround.fcm;
+package com.opalfire.foodorder.fcm;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
-import com.opalfire.orderaround.helper.SharedHelper;
+import com.opalfire.foodorder.helper.SharedHelper;
 
 public class MyFirebaseInstanceIDService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseInstanceIDService";

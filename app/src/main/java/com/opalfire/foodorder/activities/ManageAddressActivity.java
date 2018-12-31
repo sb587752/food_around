@@ -98,7 +98,7 @@ public class ManageAddressActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
-    /* renamed from: com.entriver.orderaround.activities.ManageAddressActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.ManageAddressActivity$1 */
     class C07381 implements OnClickListener {
         C07381() {
         }
@@ -108,7 +108,7 @@ public class ManageAddressActivity extends AppCompatActivity {
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.ManageAddressActivity$2 */
+    /* renamed from: com.entriver.foodorder.activities.ManageAddressActivity$2 */
     class C13152 implements Callback<List<Address>> {
         C13152() {
         }

@@ -1,11 +1,10 @@
-package com.opalfire.orderaround.Pubnub;
+package com.opalfire.foodorder.Pubnub;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +18,9 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.opalfire.orderaround.BuildConfig;
-import com.opalfire.orderaround.R;
-import com.opalfire.orderaround.helper.GlobalData;
+import com.opalfire.foodorder.BuildConfig;
+import com.opalfire.foodorder.R;
+import com.opalfire.foodorder.helper.GlobalData;
 import com.pubnub.api.PNConfiguration;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.callbacks.PNCallback;
@@ -34,16 +33,14 @@ import com.pubnub.api.models.consumer.history.PNHistoryResult;
 import com.pubnub.api.models.consumer.pubsub.PNMessageResult;
 import com.pubnub.api.models.consumer.pubsub.PNPresenceEventResult;
 
-import java.io.PrintStream;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class ChatFragment
         extends Fragment
@@ -223,9 +220,3 @@ public class ChatFragment
         Log.d(TAG, "subscribed");
     }
 }
-
-
-/* Location:              C:\APK Extractor\Order_Around-dex2jar.jar!\com\orderaround\user\Pubnub\ChatFragment.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

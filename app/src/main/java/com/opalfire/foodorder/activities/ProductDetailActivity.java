@@ -171,7 +171,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         finish();
     }
 
-    /* renamed from: com.entriver.orderaround.activities.ProductDetailActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.ProductDetailActivity$1 */
     class C07521 implements OnClickListener {
         C07521() {
         }
@@ -181,7 +181,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.ProductDetailActivity$2 */
+    /* renamed from: com.entriver.foodorder.activities.ProductDetailActivity$2 */
     class C07552 implements OnClickListener {
 
         C07552() {
@@ -244,7 +244,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             ProductDetailActivity.this.addItem(view);
         }
 
-        /* renamed from: com.entriver.orderaround.activities.ProductDetailActivity$2$1 */
+        /* renamed from: com.entriver.foodorder.activities.ProductDetailActivity$2$1 */
         class C07531 implements DialogInterface.OnClickListener {
             C07531() {
             }
@@ -255,7 +255,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.ProductDetailActivity$3 */
+    /* renamed from: com.entriver.foodorder.activities.ProductDetailActivity$3 */
     class C13373 implements OnPageChangeListener {
         C13373() {
         }
@@ -271,7 +271,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.ProductDetailActivity$4 */
+    /* renamed from: com.entriver.foodorder.activities.ProductDetailActivity$4 */
     class C13384 implements Callback<ClearCart> {
         C13384() {
         }
@@ -295,7 +295,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.ProductDetailActivity$5 */
+    /* renamed from: com.entriver.foodorder.activities.ProductDetailActivity$5 */
     class C13395 implements Callback<AddCart> {
         C13395() {
         }

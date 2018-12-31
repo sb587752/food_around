@@ -105,7 +105,7 @@ public class AccountPaymentAdapter extends BaseAdapter {
                 view.setTypeface(view.getTypeface(), 1);
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.AccountPaymentAdapter$2$1 */
+            /* renamed from: com.entriver.foodorder.adapter.AccountPaymentAdapter$2$1 */
             class C07721 implements DialogInterface.OnClickListener {
                 C07721() {
                 }
@@ -115,7 +115,7 @@ public class AccountPaymentAdapter extends BaseAdapter {
                 }
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.AccountPaymentAdapter$2$2 */
+            /* renamed from: com.entriver.foodorder.adapter.AccountPaymentAdapter$2$2 */
             class C07732 implements DialogInterface.OnClickListener {
                 C07732() {
                 }

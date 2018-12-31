@@ -202,12 +202,12 @@ Error: java.lang.NullPointerException
                     r1 = r5;	 Catch:{ Exception -> 0x0024 }
                     r2 = r6;	 Catch:{ Exception -> 0x0024 }
                     r2 = r2.getBearing();	 Catch:{ Exception -> 0x0024 }
-                    r4 = com.entriver.orderaround.activities.CurrentOrderDetailActivity.computeRotation(r4, r1, r2);	 Catch:{ Exception -> 0x0024 }
+                    r4 = com.entriver.foodorder.activities.CurrentOrderDetailActivity.computeRotation(r4, r1, r2);	 Catch:{ Exception -> 0x0024 }
                     r0.setRotation(r4);	 Catch:{ Exception -> 0x0024 }
                 L_0x0024:
                     return;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: com.entriver.orderaround.activities.CurrentOrderDetailActivity.9.onAnimationUpdate(android.animation.ValueAnimator):void");
+                    throw new UnsupportedOperationException("Method not decompiled: com.entriver.foodorder.activities.CurrentOrderDetailActivity.9.onAnimationUpdate(android.animation.ValueAnimator):void");
                 }
             });
             ofFloat.start();
@@ -355,7 +355,7 @@ Error: java.lang.NullPointerException
 */
         /*
         r2 = this;
-        r0 = r2.context;	 Catch:{ NotFoundException -> 0x001f }
+        r0 = r2.mContext;	 Catch:{ NotFoundException -> 0x001f }
         r1 = 2131755013; // 0x7f100005 float:1.9140893E38 double:1.0532269173E-314;	 Catch:{ NotFoundException -> 0x001f }
         r0 = com.google.android.gms.maps.model.MapStyleOptions.loadRawResourceStyle(r0, r1);	 Catch:{ NotFoundException -> 0x001f }
         r0 = r3.setMapStyle(r0);	 Catch:{ NotFoundException -> 0x001f }
@@ -379,7 +379,7 @@ Error: java.lang.NullPointerException
         r2.setupMap();
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: com.entriver.orderaround.activities.CurrentOrderDetailActivity.onMapReady(com.google.android.gms.maps.GoogleMap):void");
+        throw new UnsupportedOperationException("Method not decompiled: com.entriver.foodorder.activities.CurrentOrderDetailActivity.onMapReady(com.google.android.gms.maps.GoogleMap):void");
     }
 
     void setupMap() {
@@ -709,7 +709,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.CurrentOrderDetailActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.CurrentOrderDetailActivity$1 */
     class C07181 implements OnClickListener {
         C07181() {
         }
@@ -719,7 +719,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.CurrentOrderDetailActivity$2 */
+    /* renamed from: com.entriver.foodorder.activities.CurrentOrderDetailActivity$2 */
     class C07192 implements OnClickListener {
         C07192() {
         }
@@ -729,7 +729,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.CurrentOrderDetailActivity$3 */
+    /* renamed from: com.entriver.foodorder.activities.CurrentOrderDetailActivity$3 */
     class C07203 implements Runnable {
         C07203() {
         }
@@ -740,7 +740,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.CurrentOrderDetailActivity$4 */
+    /* renamed from: com.entriver.foodorder.activities.CurrentOrderDetailActivity$4 */
     class C07214 implements OnTouchListener {
         C07214() {
         }
@@ -762,7 +762,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.CurrentOrderDetailActivity$5 */
+    /* renamed from: com.entriver.foodorder.activities.CurrentOrderDetailActivity$5 */
     class C07225 implements DialogInterface.OnClickListener {
         C07225() {
         }
@@ -896,7 +896,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.CurrentOrderDetailActivity$7 */
+    /* renamed from: com.entriver.foodorder.activities.CurrentOrderDetailActivity$7 */
     class C12897 implements Callback<Order> {
         C12897() {
         }
@@ -920,7 +920,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.CurrentOrderDetailActivity$8 */
+    /* renamed from: com.entriver.foodorder.activities.CurrentOrderDetailActivity$8 */
     class C12908 implements Callback<Order> {
         C12908() {
         }

@@ -326,7 +326,7 @@ public class MobileNumberActivity extends AppCompatActivity implements OnConnect
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
-    /* renamed from: com.entriver.orderaround.activities.MobileNumberActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.MobileNumberActivity$1 */
     class C07391 implements Comparator<Country> {
         C07391() {
         }
@@ -336,7 +336,7 @@ public class MobileNumberActivity extends AppCompatActivity implements OnConnect
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.MobileNumberActivity$3 */
+    /* renamed from: com.entriver.foodorder.activities.MobileNumberActivity$3 */
     class C07403 implements OnClickListener {
         C07403() {
         }
@@ -346,7 +346,7 @@ public class MobileNumberActivity extends AppCompatActivity implements OnConnect
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.MobileNumberActivity$4 */
+    /* renamed from: com.entriver.foodorder.activities.MobileNumberActivity$4 */
     class C07414 implements OnClickListener {
         C07414() {
         }
@@ -356,7 +356,7 @@ public class MobileNumberActivity extends AppCompatActivity implements OnConnect
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.MobileNumberActivity$6 */
+    /* renamed from: com.entriver.foodorder.activities.MobileNumberActivity$6 */
     class C07426 implements OnClickListener {
         C07426() {
         }
@@ -366,7 +366,7 @@ public class MobileNumberActivity extends AppCompatActivity implements OnConnect
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.MobileNumberActivity$7 */
+    /* renamed from: com.entriver.foodorder.activities.MobileNumberActivity$7 */
     class C07437 implements OnClickListener {
         C07437() {
         }
@@ -406,7 +406,7 @@ public class MobileNumberActivity extends AppCompatActivity implements OnConnect
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.MobileNumberActivity$2 */
+    /* renamed from: com.entriver.foodorder.activities.MobileNumberActivity$2 */
     class C13172 implements FacebookCallback<LoginResult> {
         C13172() {
         }
@@ -430,7 +430,7 @@ public class MobileNumberActivity extends AppCompatActivity implements OnConnect
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.MobileNumberActivity$5 */
+    /* renamed from: com.entriver.foodorder.activities.MobileNumberActivity$5 */
     class C13185 implements GraphJSONObjectCallback {
         C13185() {
         }
@@ -480,7 +480,7 @@ public class MobileNumberActivity extends AppCompatActivity implements OnConnect
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.MobileNumberActivity$8 */
+    /* renamed from: com.entriver.foodorder.activities.MobileNumberActivity$8 */
     class C13198 implements Callback<ForgotPassword> {
         C13198() {
         }
@@ -506,7 +506,7 @@ public class MobileNumberActivity extends AppCompatActivity implements OnConnect
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.MobileNumberActivity$9 */
+    /* renamed from: com.entriver.foodorder.activities.MobileNumberActivity$9 */
     class C13209 implements Callback<Otp> {
         C13209() {
         }

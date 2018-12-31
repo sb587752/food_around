@@ -103,7 +103,7 @@ public class PromotionActivity extends AppCompatActivity implements PromotionLis
         finish();
     }
 
-    /* renamed from: com.entriver.orderaround.activities.PromotionActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.PromotionActivity$1 */
     class C07561 implements OnClickListener {
         C07561() {
         }
@@ -113,7 +113,7 @@ public class PromotionActivity extends AppCompatActivity implements PromotionLis
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.PromotionActivity$2 */
+    /* renamed from: com.entriver.foodorder.activities.PromotionActivity$2 */
     class C13402 implements Callback<List<Promotions>> {
         C13402() {
         }
@@ -144,7 +144,7 @@ public class PromotionActivity extends AppCompatActivity implements PromotionLis
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.PromotionActivity$3 */
+    /* renamed from: com.entriver.foodorder.activities.PromotionActivity$3 */
     class C13413 implements Callback<PromotionResponse> {
         C13413() {
         }

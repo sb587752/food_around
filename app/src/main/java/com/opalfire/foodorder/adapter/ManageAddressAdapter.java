@@ -142,7 +142,7 @@ public class ManageAddressAdapter extends Adapter<MyViewHolder> {
                         ManageAddressAdapter.this.apiInterface.deleteAddress(num.intValue()).enqueue(new C13821());
                     }
 
-                    /* renamed from: com.entriver.orderaround.adapter.ManageAddressAdapter$MyViewHolder$1$1 */
+                    /* renamed from: com.entriver.foodorder.adapter.ManageAddressAdapter$MyViewHolder$1$1 */
                     class C13821 implements Callback<Message> {
                         C13821() {
                         }

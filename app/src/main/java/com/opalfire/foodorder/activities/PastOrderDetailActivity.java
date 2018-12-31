@@ -164,7 +164,7 @@ public class PastOrderDetailActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(context));
     }
 
-    /* renamed from: com.entriver.orderaround.activities.PastOrderDetailActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.PastOrderDetailActivity$1 */
     class C07511 implements OnClickListener {
         C07511() {
         }

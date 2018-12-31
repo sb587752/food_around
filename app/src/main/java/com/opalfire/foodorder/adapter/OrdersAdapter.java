@@ -226,7 +226,7 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<ViewHolder> {
         }
     }
 
-    /* renamed from: com.entriver.orderaround.adapter.OrdersAdapter$3 */
+    /* renamed from: com.entriver.foodorder.adapter.OrdersAdapter$3 */
     class C08123 implements OnClickListener {
         C08123() {
         }
@@ -235,7 +235,7 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<ViewHolder> {
         }
     }
 
-    /* renamed from: com.entriver.orderaround.adapter.OrdersAdapter$5 */
+    /* renamed from: com.entriver.foodorder.adapter.OrdersAdapter$5 */
     class C13835 implements Callback<AddCart> {
         C13835() {
         }

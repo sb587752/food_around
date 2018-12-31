@@ -28,6 +28,17 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation.TitleState;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.facebook.FacebookSdk;
+import com.foodorder.user.build.api.ApiClient;
+import com.foodorder.user.build.api.ApiInterface;
+import com.foodorder.user.fragments.CartFragment;
+import com.foodorder.user.fragments.HomeFragment;
+import com.foodorder.user.fragments.ProfileFragment;
+import com.foodorder.user.fragments.SearchFragment;
+import com.foodorder.user.helper.ConnectionHelper;
+import com.foodorder.user.helper.GlobalData;
+import com.foodorder.user.helper.SharedHelper;
+import com.foodorder.user.models.Cart;
+import com.foodorder.user.models.DisputeMessage;
 import com.google.android.gms.auth.api.credentials.CredentialsApi;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -42,17 +53,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.orderaround.user.build.api.ApiClient;
-import com.orderaround.user.build.api.ApiInterface;
-import com.orderaround.user.fragments.CartFragment;
-import com.orderaround.user.fragments.HomeFragment;
-import com.orderaround.user.fragments.ProfileFragment;
-import com.orderaround.user.fragments.SearchFragment;
-import com.orderaround.user.helper.ConnectionHelper;
-import com.orderaround.user.helper.GlobalData;
-import com.orderaround.user.helper.SharedHelper;
-import com.orderaround.user.models.Cart;
-import com.orderaround.user.models.DisputeMessage;
 
 import org.json.JSONObject;
 
@@ -101,7 +101,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
                 bottomNavigation.setNotification(notification, 2);
             }
         } else if (bottomNavigation != null) {
-            bottomNavigation.setNotificationBackgroundColor(ContextCompat.getColor(context, C0709R.color.theme));
+            bottomNavigation.setNotificationBackgroundColor(ContextCompat.getColor(context, R.color.theme));
             bottomNavigation.setNotification(String.valueOf(i), 2);
         }
     }
@@ -111,7 +111,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
         if (SharedHelper.getKey(this.context, "login_by").equals("facebook") != null) {
             FacebookSdk.sdkInitialize(getApplicationContext());
         }
-        setContentView((int) C0709R.layout.activity_home);
+        setContentView((int) R.layout.activity_home);
         this.connectionHelper = new ConnectionHelper(this);
         this.isChangePassword = getIntent().getBooleanExtra("change_language", false);
         this.mFusedLocationClient = LocationServices.getFusedLocationProviderClient((Activity) this);
@@ -130,11 +130,11 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
         }
         this.fragmentManager = getSupportFragmentManager();
         this.transaction = this.fragmentManager.beginTransaction();
-        bottomNavigation = (AHBottomNavigation) findViewById(C0709R.id.bottom_navigation);
-        bundle = new AHBottomNavigationItem((int) C0709R.string.home, (int) C0709R.drawable.ic_home, (int) C0709R.color.grey);
-        AHBottomNavigationItem aHBottomNavigationItem = new AHBottomNavigationItem((int) C0709R.string.search, (int) C0709R.drawable.ic_search, (int) C0709R.color.grey);
-        AHBottomNavigationItem aHBottomNavigationItem2 = new AHBottomNavigationItem("Cart", (int) C0709R.drawable.ic_cart, (int) C0709R.color.grey);
-        AHBottomNavigationItem aHBottomNavigationItem3 = new AHBottomNavigationItem("Profile", (int) C0709R.drawable.ic_user, (int) C0709R.color.grey);
+        bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
+        bundle = new AHBottomNavigationItem((int) R.string.home, (int) R.drawable.ic_home, (int) R.color.grey);
+        AHBottomNavigationItem aHBottomNavigationItem = new AHBottomNavigationItem((int) R.string.search, (int) R.drawable.ic_search, (int) R.color.grey);
+        AHBottomNavigationItem aHBottomNavigationItem2 = new AHBottomNavigationItem("Cart", (int) R.drawable.ic_cart, (int) R.color.grey);
+        AHBottomNavigationItem aHBottomNavigationItem3 = new AHBottomNavigationItem("Profile", (int) R.drawable.ic_user, (int) R.color.grey);
         bottomNavigation.addItem(bundle);
         bottomNavigation.addItem(aHBottomNavigationItem);
         bottomNavigation.addItem(aHBottomNavigationItem2);
@@ -147,11 +147,11 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
         bottomNavigation.setInactiveColor(Color.parseColor("#747474"));
         if (this.isChangePassword != null) {
             this.fragment = new ProfileFragment();
-            this.transaction.add((int) C0709R.id.main_container, this.fragment).commit();
+            this.transaction.add((int) R.id.main_container, this.fragment).commit();
             bottomNavigation.setCurrentItem(3);
         } else {
             this.fragment = new HomeFragment();
-            this.transaction.add((int) C0709R.id.main_container, this.fragment).commit();
+            this.transaction.add((int) R.id.main_container, this.fragment).commit();
             bottomNavigation.setCurrentItem(View.VISIBLE);
         }
         bottomNavigation.setOnTabSelectedListener(new C12643());
@@ -213,7 +213,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
         stringBuilder.append(latitude);
         stringBuilder.append(",");
         stringBuilder.append(longitude);
-        apiInterface.getResponse(stringBuilder.toString(), this.context.getResources().getString(C0709R.string.google_api_key)).enqueue(new C12665());
+        apiInterface.getResponse(stringBuilder.toString(), this.context.getResources().getString(R.string.google_api_key)).enqueue(new C12665());
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -348,7 +348,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
         getAddress();
     }
 
-    /* renamed from: com.orderaround.user.HomeActivity$7 */
+    /* renamed from: com.foodorder.user.HomeActivity$7 */
     class C07057 implements OnClickListener {
         C07057() {
         }
@@ -358,7 +358,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
         }
     }
 
-    /* renamed from: com.orderaround.user.HomeActivity$1 */
+    /* renamed from: com.foodorder.user.HomeActivity$1 */
     class C12621 implements OnSuccessListener<Location> {
         C12621() {
         }
@@ -390,7 +390,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
         }
     }
 
-    /* renamed from: com.orderaround.user.HomeActivity$2 */
+    /* renamed from: com.foodorder.user.HomeActivity$2 */
     class C12632 implements OnSuccessListener<Location> {
         C12632() {
         }
@@ -422,7 +422,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
         }
     }
 
-    /* renamed from: com.orderaround.user.HomeActivity$3 */
+    /* renamed from: com.foodorder.user.HomeActivity$3 */
     class C12643 implements OnTabSelectedListener {
         C12643() {
         }
@@ -450,7 +450,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
         }
     }
 
-    /* renamed from: com.orderaround.user.HomeActivity$4 */
+    /* renamed from: com.foodorder.user.HomeActivity$4 */
     class C12654 implements Callback<List<DisputeMessage>> {
         C12654() {
         }
@@ -474,7 +474,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
         }
     }
 
-    /* renamed from: com.orderaround.user.HomeActivity$5 */
+    /* renamed from: com.foodorder.user.HomeActivity$5 */
     class C12665 implements Callback<ResponseBody> {
         C12665() {
         }
@@ -556,7 +556,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
         }
     }
 
-    /* renamed from: com.orderaround.user.HomeActivity$6 */
+    /* renamed from: com.foodorder.user.HomeActivity$6 */
     class C12676 implements ResultCallback<LocationSettingsResult> {
         C12676() {
         }
@@ -591,17 +591,17 @@ Error: java.lang.NullPointerException
         L_0x000d:
             goto L_0x001b;
         L_0x000e:
-            r0 = com.orderaround.user.HomeActivity.this;	 Catch:{ SendIntentException -> 0x001b }
+            r0 = com.foodorder.user.HomeActivity.this;	 Catch:{ SendIntentException -> 0x001b }
             r1 = 2000; // 0x7d0 float:2.803E-42 double:9.88E-321;	 Catch:{ SendIntentException -> 0x001b }
             r3.startResolutionForResult(r0, r1);	 Catch:{ SendIntentException -> 0x001b }
             goto L_0x001b;
         L_0x0016:
-            r3 = com.orderaround.user.HomeActivity.this;
+            r3 = com.foodorder.user.HomeActivity.this;
             r3.getLocation();
         L_0x001b:
             return;
             */
-            throw new UnsupportedOperationException("Method not decompiled: com.orderaround.user.HomeActivity.6.onResult(com.google.android.gms.location.LocationSettingsResult):void");
+            throw new UnsupportedOperationException("Method not decompiled: com.foodorder.user.HomeActivity.6.onResult(com.google.android.gms.location.LocationSettingsResult):void");
         }
     }
 }

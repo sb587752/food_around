@@ -132,21 +132,21 @@ Error: java.lang.NullPointerException
 */
         /*
         r4 = this;
-        r0 = r4.context;	 Catch:{ Exception -> 0x0091 }
+        r0 = r4.mContext;	 Catch:{ Exception -> 0x0091 }
         r1 = "device_token";	 Catch:{ Exception -> 0x0091 }
-        r0 = com.entriver.orderaround.helper.SharedHelper.getKey(r0, r1);	 Catch:{ Exception -> 0x0091 }
+        r0 = com.entriver.foodorder.helper.SharedHelper.getKey(r0, r1);	 Catch:{ Exception -> 0x0091 }
         r1 = "";	 Catch:{ Exception -> 0x0091 }
         r0 = r0.equals(r1);	 Catch:{ Exception -> 0x0091 }
         if (r0 != 0) goto L_0x003d;	 Catch:{ Exception -> 0x0091 }
     L_0x0010:
-        r0 = r4.context;	 Catch:{ Exception -> 0x0091 }
+        r0 = r4.mContext;	 Catch:{ Exception -> 0x0091 }
         r1 = "device_token";	 Catch:{ Exception -> 0x0091 }
-        r0 = com.entriver.orderaround.helper.SharedHelper.getKey(r0, r1);	 Catch:{ Exception -> 0x0091 }
+        r0 = com.entriver.foodorder.helper.SharedHelper.getKey(r0, r1);	 Catch:{ Exception -> 0x0091 }
         if (r0 == 0) goto L_0x003d;	 Catch:{ Exception -> 0x0091 }
     L_0x001a:
-        r0 = r4.context;	 Catch:{ Exception -> 0x0091 }
+        r0 = r4.mContext;	 Catch:{ Exception -> 0x0091 }
         r1 = "device_token";	 Catch:{ Exception -> 0x0091 }
-        r0 = com.entriver.orderaround.helper.SharedHelper.getKey(r0, r1);	 Catch:{ Exception -> 0x0091 }
+        r0 = com.entriver.foodorder.helper.SharedHelper.getKey(r0, r1);	 Catch:{ Exception -> 0x0091 }
         r4.device_token = r0;	 Catch:{ Exception -> 0x0091 }
         r0 = r4.TAG;	 Catch:{ Exception -> 0x0091 }
         r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0091 }
@@ -168,7 +168,7 @@ Error: java.lang.NullPointerException
         r0.append(r1);	 Catch:{ Exception -> 0x0091 }
         r0 = r0.toString();	 Catch:{ Exception -> 0x0091 }
         r4.device_token = r0;	 Catch:{ Exception -> 0x0091 }
-        r0 = r4.context;	 Catch:{ Exception -> 0x0091 }
+        r0 = r4.mContext;	 Catch:{ Exception -> 0x0091 }
         r1 = "device_token";	 Catch:{ Exception -> 0x0091 }
         r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0091 }
         r2.<init>();	 Catch:{ Exception -> 0x0091 }
@@ -178,7 +178,7 @@ Error: java.lang.NullPointerException
         r3 = r3.getToken();	 Catch:{ Exception -> 0x0091 }
         r2.append(r3);	 Catch:{ Exception -> 0x0091 }
         r2 = r2.toString();	 Catch:{ Exception -> 0x0091 }
-        com.entriver.orderaround.helper.SharedHelper.putKey(r0, r1, r2);	 Catch:{ Exception -> 0x0091 }
+        com.entriver.foodorder.helper.SharedHelper.putKey(r0, r1, r2);	 Catch:{ Exception -> 0x0091 }
         r0 = r4.TAG;	 Catch:{ Exception -> 0x0091 }
         r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0091 }
         r1.<init>();	 Catch:{ Exception -> 0x0091 }
@@ -221,7 +221,7 @@ Error: java.lang.NullPointerException
     L_0x00d0:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: com.entriver.orderaround.activities.EditAccountActivity.getDeviceToken():void");
+        throw new UnsupportedOperationException("Method not decompiled: com.entriver.foodorder.activities.EditAccountActivity.getDeviceToken():void");
     }
 
     private void getProfile() {
@@ -318,7 +318,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.EditAccountActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.EditAccountActivity$1 */
     class C07261 implements OnClickListener {
         C07261() {
         }
@@ -328,7 +328,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.EditAccountActivity$4 */
+    /* renamed from: com.entriver.foodorder.activities.EditAccountActivity$4 */
     class C07274 implements OnClickListener {
         C07274() {
         }
@@ -338,7 +338,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.EditAccountActivity$2 */
+    /* renamed from: com.entriver.foodorder.activities.EditAccountActivity$2 */
     class C12912 implements Callback<User> {
         C12912() {
         }
@@ -353,7 +353,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.EditAccountActivity$3 */
+    /* renamed from: com.entriver.foodorder.activities.EditAccountActivity$3 */
     class C12923 implements Callback<User> {
         C12923() {
         }

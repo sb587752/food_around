@@ -118,7 +118,7 @@ public class OrdersActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(context));
     }
 
-    /* renamed from: com.entriver.orderaround.activities.OrdersActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.OrdersActivity$1 */
     class C07451 implements OnClickListener {
         C07451() {
         }
@@ -128,7 +128,7 @@ public class OrdersActivity extends AppCompatActivity {
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.OrdersActivity$2 */
+    /* renamed from: com.entriver.foodorder.activities.OrdersActivity$2 */
     class C13262 implements Callback<List<Order>> {
         C13262() {
         }
@@ -166,7 +166,7 @@ public class OrdersActivity extends AppCompatActivity {
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.OrdersActivity$3 */
+    /* renamed from: com.entriver.foodorder.activities.OrdersActivity$3 */
     class C13273 implements Callback<List<Order>> {
         C13273() {
         }

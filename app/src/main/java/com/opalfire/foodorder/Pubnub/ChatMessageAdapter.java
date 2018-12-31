@@ -1,4 +1,4 @@
-package com.opalfire.orderaround.Pubnub;
+package com.opalfire.foodorder.Pubnub;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.opalfire.orderaround.R;
+import com.opalfire.foodorder.R;
 
 import java.util.List;
 

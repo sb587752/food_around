@@ -1,4 +1,4 @@
-package com.opalfire.orderaround.activities;
+package com.opalfire.foodorder.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,19 +23,23 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.foodorder.user.Pubnub.ChatFragment;
+import com.foodorder.user.R;
+import com.foodorder.user.build.api.ApiClient;
+import com.foodorder.user.build.api.ApiInterface;
+import com.foodorder.user.helper.CustomDialog;
+import com.foodorder.user.helper.GlobalData;
+import com.foodorder.user.models.Item;
+import com.foodorder.user.models.Order;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.orderaround.user.C0709R;
-import com.orderaround.user.Pubnub.ChatFragment;
-import com.orderaround.user.build.api.ApiClient;
-import com.orderaround.user.build.api.ApiInterface;
-import com.orderaround.user.helper.CustomDialog;
-import com.orderaround.user.helper.GlobalData;
-import com.orderaround.user.models.Item;
-import com.orderaround.user.models.Order;
-import java.util.HashMap;
-import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,54 +74,11 @@ public class OtherHelpActivity extends AppCompatActivity {
     @BindView(2131296914)
     Toolbar toolbar;
 
-    /* renamed from: com.orderaround.user.activities.OtherHelpActivity$1 */
-    class C07461 implements OnClickListener {
-        C07461() {
-        }
-
-        public void onClick(View view) {
-            OtherHelpActivity.this.onBackPressed();
-        }
-    }
-
-    /* renamed from: com.orderaround.user.activities.OtherHelpActivity$3 */
-    class C07483 implements DialogInterface.OnClickListener {
-        C07483() {
-        }
-
-        public void onClick(DialogInterface dialogInterface, int i) {
-            dialogInterface.dismiss();
-        }
-    }
-
-    /* renamed from: com.orderaround.user.activities.OtherHelpActivity$5 */
-    class C13285 implements Callback<Order> {
-        public void onFailure(@NonNull Call<Order> call, @NonNull Throwable th) {
-        }
-
-        C13285() {
-        }
-
-        public void onResponse(@NonNull Call<Order> call, @NonNull Response<Order> response) {
-            OtherHelpActivity.this.customDialog.dismiss();
-            if (response.isSuccessful() != null) {
-                Toast.makeText(OtherHelpActivity.this, "Dispute create successfully", 0).show();
-                OtherHelpActivity.this.finish();
-                return;
-            }
-            try {
-                Toast.makeText(OtherHelpActivity.this.context, new JSONObject(response.errorBody().string()).optString("message"), 1).show();
-            } catch (Response<Order> response2) {
-                Toast.makeText(OtherHelpActivity.this.context, response2.getMessage(), 1).show();
-            }
-        }
-    }
-
     protected void onCreate(Bundle bundle) {
         TextView textView;
         StringBuilder stringBuilder;
         super.onCreate(bundle);
-        setContentView((int) C0709R.layout.activity_other_help);
+        setContentView((int) R.layout.activity_other_help);
         ButterKnife.bind((Activity) this);
         this.context = this;
         this.customDialog = new CustomDialog(this.context);
@@ -156,7 +117,7 @@ public class OtherHelpActivity extends AppCompatActivity {
             this.chatUs.performClick();
         }
         setSupportActionBar(this.toolbar);
-        this.toolbar.setNavigationIcon((int) C0709R.drawable.ic_back);
+        this.toolbar.setNavigationIcon((int) R.drawable.ic_back);
         this.toolbar.setNavigationOnClickListener(new C07461());
     }
 
@@ -164,10 +125,10 @@ public class OtherHelpActivity extends AppCompatActivity {
         final String[] strArr = new String[]{"COMPLAINED", "CANCELED", "REFUND"};
         this.disputeType = "COMPLAINED";
         Builder builder = new Builder(this);
-        View inflate = getLayoutInflater().inflate(C0709R.layout.dispute_dialog, null);
+        View inflate = getLayoutInflater().inflate(R.layout.dispute_dialog, null);
         builder.setView(inflate);
-        final EditText editText = (EditText) inflate.findViewById(C0709R.id.reason_edit);
-        Spinner spinner = (Spinner) inflate.findViewById(C0709R.id.dispute_type);
+        final EditText editText = (EditText) inflate.findViewById(R.id.reason_edit);
+        Spinner spinner = (Spinner) inflate.findViewById(R.id.dispute_type);
         SpinnerAdapter arrayAdapter = new ArrayAdapter(this, 17367048, strArr);
         arrayAdapter.setDropDownViewResource(17367049);
         spinner.setAdapter(arrayAdapter);
@@ -181,8 +142,8 @@ public class OtherHelpActivity extends AppCompatActivity {
         });
         builder.setTitle(this.orderIdTxt.getText().toString());
         builder.setMessage(this.reason);
-        builder.setPositiveButton(getString(C0709R.string.submit), null);
-        builder.setNegativeButton(getString(C0709R.string.cancel), new C07483());
+        builder.setPositiveButton(getString(R.string.submit), null);
+        builder.setNegativeButton(getString(R.string.cancel), new C07483());
         final AlertDialog create = builder.create();
         create.setCancelable(false);
         create.setOnShowListener(new OnShowListener() {
@@ -212,19 +173,14 @@ public class OtherHelpActivity extends AppCompatActivity {
         create.show();
     }
 
-    private void postDispute(HashMap<String, String> hashMap) {
-        this.customDialog.show();
-        this.apiInterface.postDispute(hashMap).enqueue(new C13285());
-    }
-
     @OnClick({2131296409, 2131296489})
     public void onViewClicked(View view) {
         view = view.getId();
-        if (view == C0709R.id.chat_us) {
+        if (view == R.id.chat_us) {
             this.fragmentTransaction = this.fragmentManager.beginTransaction();
-            this.fragmentTransaction.replace(C0709R.id.chat_fragment, new ChatFragment(), "Tamil");
+            this.fragmentTransaction.replace(R.id.chat_fragment, new ChatFragment(), "Tamil");
             this.fragmentTransaction.commit();
-        } else if (view == C0709R.id.dispute) {
+        } else if (view == R.id.dispute) {
             showDialog();
         }
     }
@@ -232,7 +188,55 @@ public class OtherHelpActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-        overridePendingTransition(C0709R.anim.anim_nothing, C0709R.anim.slide_out_right);
+        overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
+    }
+
+    /* renamed from: com.foodorder.user.activities.OtherHelpActivity$1 */
+    class C07461 implements OnClickListener {
+        C07461() {
+        }
+
+        public void onClick(View view) {
+            OtherHelpActivity.this.onBackPressed();
+        }
+    }
+
+    private void postDispute(HashMap<String, String> hashMap) {
+        this.customDialog.show();
+        this.apiInterface.postDispute(hashMap).enqueue(new C13285());
+    }
+
+    /* renamed from: com.foodorder.user.activities.OtherHelpActivity$3 */
+    class C07483 implements DialogInterface.OnClickListener {
+        C07483() {
+        }
+
+        public void onClick(DialogInterface dialogInterface, int i) {
+            dialogInterface.dismiss();
+        }
+    }
+
+    /* renamed from: com.foodorder.user.activities.OtherHelpActivity$5 */
+    class C13285 implements Callback<Order> {
+        public void onFailure(@NonNull Call<Order> call, @NonNull Throwable th) {
+        }
+
+        C13285() {
+        }
+
+        public void onResponse(@NonNull Call<Order> call, @NonNull Response<Order> response) {
+            OtherHelpActivity.this.customDialog.dismiss();
+            if (response.isSuccessful() != null) {
+                Toast.makeText(OtherHelpActivity.this, "Dispute create successfully", 0).show();
+                OtherHelpActivity.this.finish();
+                return;
+            }
+            try {
+                Toast.makeText(OtherHelpActivity.this.context, new JSONObject(response.errorBody().string()).optString("message"), 1).show();
+            } catch (Response<Order> response2) {
+                Toast.makeText(OtherHelpActivity.this.context, response2.getMessage(), 1).show();
+            }
+        }
     }
 
     protected void attachBaseContext(Context context) {

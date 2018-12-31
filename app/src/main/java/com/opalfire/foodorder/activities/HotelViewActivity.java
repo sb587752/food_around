@@ -350,7 +350,7 @@ public class HotelViewActivity extends AppCompatActivity implements OnOffsetChan
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.HotelViewActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.HotelViewActivity$1 */
     class C07311 implements OnClickListener {
         C07311() {
         }
@@ -360,7 +360,7 @@ public class HotelViewActivity extends AppCompatActivity implements OnOffsetChan
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.HotelViewActivity$2 */
+    /* renamed from: com.entriver.foodorder.activities.HotelViewActivity$2 */
     class C07322 implements OnClickListener {
         C07322() {
         }
@@ -371,7 +371,7 @@ public class HotelViewActivity extends AppCompatActivity implements OnOffsetChan
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.HotelViewActivity$4 */
+    /* renamed from: com.entriver.foodorder.activities.HotelViewActivity$4 */
     class C07334 implements OnClickListener {
         C07334() {
         }
@@ -387,7 +387,7 @@ public class HotelViewActivity extends AppCompatActivity implements OnOffsetChan
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.HotelViewActivity$3 */
+    /* renamed from: com.entriver.foodorder.activities.HotelViewActivity$3 */
     class C12973 implements Target {
         static final /* synthetic */ boolean $assertionsDisabled = false;
 
@@ -409,7 +409,7 @@ public class HotelViewActivity extends AppCompatActivity implements OnOffsetChan
             Palette.from(bitmap).generate(new C12961());
         }
 
-        /* renamed from: com.entriver.orderaround.activities.HotelViewActivity$3$1 */
+        /* renamed from: com.entriver.foodorder.activities.HotelViewActivity$3$1 */
         class C12961 implements PaletteAsyncListener {
             C12961() {
             }
@@ -443,7 +443,7 @@ public class HotelViewActivity extends AppCompatActivity implements OnOffsetChan
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.HotelViewActivity$5 */
+    /* renamed from: com.entriver.foodorder.activities.HotelViewActivity$5 */
     class C12985 implements OnCheckedChangeListener {
         C12985() {
         }
@@ -467,7 +467,7 @@ public class HotelViewActivity extends AppCompatActivity implements OnOffsetChan
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.HotelViewActivity$6 */
+    /* renamed from: com.entriver.foodorder.activities.HotelViewActivity$6 */
     class C12996 implements Callback<Favorite> {
         C12996() {
         }
@@ -480,7 +480,7 @@ public class HotelViewActivity extends AppCompatActivity implements OnOffsetChan
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.HotelViewActivity$7 */
+    /* renamed from: com.entriver.foodorder.activities.HotelViewActivity$7 */
     class C13007 implements Callback<Favorite> {
         C13007() {
         }
@@ -493,7 +493,7 @@ public class HotelViewActivity extends AppCompatActivity implements OnOffsetChan
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.HotelViewActivity$8 */
+    /* renamed from: com.entriver.foodorder.activities.HotelViewActivity$8 */
     class C13018 implements Callback<ShopDetail> {
         C13018() {
         }

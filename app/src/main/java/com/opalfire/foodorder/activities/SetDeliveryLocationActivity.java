@@ -155,7 +155,7 @@ Error: java.lang.NullPointerException
     L_0x000f:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: com.entriver.orderaround.activities.SetDeliveryLocationActivity.findPlace():void");
+        throw new UnsupportedOperationException("Method not decompiled: com.entriver.foodorder.activities.SetDeliveryLocationActivity.findPlace():void");
     }
 
     protected void attachBaseContext(Context context) {
@@ -168,7 +168,7 @@ Error: java.lang.NullPointerException
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SetDeliveryLocationActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.SetDeliveryLocationActivity$1 */
     class C07611 implements OnClickListener {
         C07611() {
         }
@@ -178,7 +178,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SetDeliveryLocationActivity$2 */
+    /* renamed from: com.entriver.foodorder.activities.SetDeliveryLocationActivity$2 */
     class C13592 implements Callback<List<Address>> {
         C13592() {
         }

@@ -1,4 +1,4 @@
-package com.opalfire.orderaround.activities;
+package com.opalfire.foodorder.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,20 +13,23 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
+import com.foodorder.user.R;
+import com.foodorder.user.adapter.FavouritesAdapter;
+import com.foodorder.user.build.api.ApiClient;
+import com.foodorder.user.build.api.ApiInterface;
+import com.foodorder.user.models.Available;
+import com.foodorder.user.models.FavListModel;
+import com.foodorder.user.models.FavoriteList;
 import com.google.gson.Gson;
-import com.orderaround.user.C0709R;
-import com.orderaround.user.adapter.FavouritesAdapter;
-import com.orderaround.user.build.api.ApiClient;
-import com.orderaround.user.build.api.ApiInterface;
-import com.orderaround.user.models.Available;
-import com.orderaround.user.models.FavListModel;
-import com.orderaround.user.models.FavoriteList;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,7 +50,31 @@ public class FavouritesActivity extends AppCompatActivity {
     @BindView(2131296914)
     Toolbar toolbar;
 
-    /* renamed from: com.orderaround.user.activities.FavouritesActivity$1 */
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        setContentView((int) R.layout.activity_favourites);
+        ButterKnife.bind((Activity) this);
+        setSupportActionBar(this.toolbar);
+        this.toolbar.setNavigationIcon((int) R.drawable.ic_back);
+        this.toolbar.setNavigationOnClickListener(new C07281());
+        this.favoritesRv.setLayoutManager(new LinearLayoutManager(this));
+        this.adapter = new FavouritesAdapter(this, this.modelListReference);
+        this.favoritesRv.setAdapter(this.adapter);
+        getFavorites();
+    }
+
+    private void getFavorites() {
+        this.skeletonScreen = Skeleton.bind(this.rootView).load(R.layout.skeleton_favorite_list_item).color(R.color.shimmer_color).angle(0).show();
+        this.apiInterface.getFavoriteList().enqueue(new C12952());
+    }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
+    }
+
+    /* renamed from: com.foodorder.user.activities.FavouritesActivity$1 */
     class C07281 implements OnClickListener {
         C07281() {
         }
@@ -57,7 +84,7 @@ public class FavouritesActivity extends AppCompatActivity {
         }
     }
 
-    /* renamed from: com.orderaround.user.activities.FavouritesActivity$2 */
+    /* renamed from: com.foodorder.user.activities.FavouritesActivity$2 */
     class C12952 implements Callback<FavoriteList> {
         C12952() {
         }
@@ -93,30 +120,6 @@ public class FavouritesActivity extends AppCompatActivity {
             FavouritesActivity.this.skeletonScreen.hide();
             Toast.makeText(FavouritesActivity.this, "Something wrong - getFavorites", 1).show();
         }
-    }
-
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setContentView((int) C0709R.layout.activity_favourites);
-        ButterKnife.bind((Activity) this);
-        setSupportActionBar(this.toolbar);
-        this.toolbar.setNavigationIcon((int) C0709R.drawable.ic_back);
-        this.toolbar.setNavigationOnClickListener(new C07281());
-        this.favoritesRv.setLayoutManager(new LinearLayoutManager(this));
-        this.adapter = new FavouritesAdapter(this, this.modelListReference);
-        this.favoritesRv.setAdapter(this.adapter);
-        getFavorites();
-    }
-
-    private void getFavorites() {
-        this.skeletonScreen = Skeleton.bind(this.rootView).load(C0709R.layout.skeleton_favorite_list_item).color(C0709R.color.shimmer_color).angle(0).show();
-        this.apiInterface.getFavoriteList().enqueue(new C12952());
-    }
-
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-        overridePendingTransition(C0709R.anim.anim_nothing, C0709R.anim.slide_out_right);
     }
 
     protected void attachBaseContext(Context context) {

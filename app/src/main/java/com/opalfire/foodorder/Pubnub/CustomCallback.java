@@ -1,4 +1,4 @@
-package com.opalfire.orderaround.Pubnub;
+package com.opalfire.foodorder.Pubnub;
 
 public abstract interface CustomCallback
 {

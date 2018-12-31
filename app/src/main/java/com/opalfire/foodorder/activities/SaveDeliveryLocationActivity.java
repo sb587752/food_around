@@ -300,7 +300,7 @@ Error: java.lang.NullPointerException
     L_0x0056:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: com.entriver.orderaround.activities.SaveDeliveryLocationActivity.onMapReady(com.google.android.gms.maps.GoogleMap):void");
+        throw new UnsupportedOperationException("Method not decompiled: com.entriver.foodorder.activities.SaveDeliveryLocationActivity.onMapReady(com.google.android.gms.maps.GoogleMap):void");
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -615,7 +615,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$4 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$4 */
     class C07584 implements OnClickListener {
         C07584() {
         }
@@ -633,7 +633,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$5 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$5 */
     class C07595 implements OnCheckedChangeListener {
         C07595() {
         }
@@ -664,7 +664,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$7 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$7 */
     class C07607 implements Runnable {
         C07607() {
         }
@@ -677,7 +677,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$1 */
     class C13481 implements OnSuccessListener<Location> {
         C13481() {
         }
@@ -689,7 +689,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$2 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$2 */
     class C13492 implements OnSuccessListener<Location> {
         C13492() {
         }
@@ -701,7 +701,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$3 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$3 */
     class C13503 extends BottomSheetCallback {
         C13503() {
         }
@@ -728,7 +728,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$6 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$6 */
     class C13516 implements ResultCallback<PlaceBuffer> {
         C13516() {
         }
@@ -747,7 +747,7 @@ Error: java.lang.NullPointerException
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$9 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$9 */
     class C13539 implements Callback<Address> {
         C13539() {
         }

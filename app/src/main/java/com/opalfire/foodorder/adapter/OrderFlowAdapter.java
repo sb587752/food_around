@@ -73,7 +73,7 @@ public class OrderFlowAdapter extends Adapter<MyViewHolder> {
         return this.list.size();
     }
 
-    /* renamed from: com.entriver.orderaround.adapter.OrderFlowAdapter$1 */
+    /* renamed from: com.entriver.foodorder.adapter.OrderFlowAdapter$1 */
     class C08081 implements Runnable {
         C08081() {
         }

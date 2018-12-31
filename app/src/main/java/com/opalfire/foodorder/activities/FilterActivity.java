@@ -127,7 +127,7 @@ public class FilterActivity extends AppCompatActivity implements OnClickListener
         super.attachBaseContext(CalligraphyContextWrapper.wrap(context));
     }
 
-    /* renamed from: com.entriver.orderaround.activities.FilterActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.FilterActivity$1 */
     class C07291 implements OnClickListener {
         C07291() {
         }

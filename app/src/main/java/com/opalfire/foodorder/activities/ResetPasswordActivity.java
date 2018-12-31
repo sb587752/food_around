@@ -131,7 +131,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         this.apiInterface.resetPassword(hashMap).enqueue(new C13431());
     }
 
-    /* renamed from: com.entriver.orderaround.activities.ResetPasswordActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.ResetPasswordActivity$1 */
     class C13431 implements Callback<ResetPassword> {
         C13431() {
         }

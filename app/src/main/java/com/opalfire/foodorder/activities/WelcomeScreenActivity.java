@@ -136,23 +136,23 @@ public class WelcomeScreenActivity extends AppCompatActivity implements Connecti
         android.support.v4.app.ActivityCompat.requestPermissions(r5, r6, r1);
     L_0x008d:
         r6 = r5.loginButton;
-        r0 = new com.entriver.orderaround.activities.WelcomeScreenActivity$1;
+        r0 = new com.entriver.foodorder.activities.WelcomeScreenActivity$1;
         r0.<init>();
         r6.setOnClickListener(r0);
         r6 = r5.signUpButton;
-        r0 = new com.entriver.orderaround.activities.WelcomeScreenActivity$2;
+        r0 = new com.entriver.foodorder.activities.WelcomeScreenActivity$2;
         r0.<init>();
         r6.setOnClickListener(r0);
         r6 = 2130771995; // 0x7f01001b float:1.7147096E38 double:1.052741242E-314;
         r0 = 2130771980; // 0x7f01000c float:1.7147065E38 double:1.0527412344E-314;
         r5.overridePendingTransition(r6, r0);
         r6 = r5.skipBtn;
-        r0 = new com.entriver.orderaround.activities.WelcomeScreenActivity$3;
+        r0 = new com.entriver.foodorder.activities.WelcomeScreenActivity$3;
         r0.<init>();
         r6.setOnClickListener(r0);
         r5.addBottomDots(r1);
         r5.changeStatusBarColor();
-        r6 = new com.entriver.orderaround.activities.WelcomeScreenActivity$MyViewPagerAdapter;
+        r6 = new com.entriver.foodorder.activities.WelcomeScreenActivity$MyViewPagerAdapter;
         r6.<init>();
         r5.myViewPagerAdapter = r6;
         r6 = r5.viewPager;
@@ -163,7 +163,7 @@ public class WelcomeScreenActivity extends AppCompatActivity implements Connecti
         r6.addOnPageChangeListener(r0);
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: com.entriver.orderaround.activities.WelcomeScreenActivity.onCreate(android.os.Bundle):void");
+        throw new UnsupportedOperationException("Method not decompiled: com.entriver.foodorder.activities.WelcomeScreenActivity.onCreate(android.os.Bundle):void");
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -241,7 +241,7 @@ public class WelcomeScreenActivity extends AppCompatActivity implements Connecti
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.WelcomeScreenActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.WelcomeScreenActivity$1 */
     class C07661 implements OnClickListener {
         C07661() {
         }
@@ -253,7 +253,7 @@ public class WelcomeScreenActivity extends AppCompatActivity implements Connecti
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.WelcomeScreenActivity$2 */
+    /* renamed from: com.entriver.foodorder.activities.WelcomeScreenActivity$2 */
     class C07672 implements OnClickListener {
         C07672() {
         }
@@ -265,7 +265,7 @@ public class WelcomeScreenActivity extends AppCompatActivity implements Connecti
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.WelcomeScreenActivity$3 */
+    /* renamed from: com.entriver.foodorder.activities.WelcomeScreenActivity$3 */
     class C07683 implements OnClickListener {
         C07683() {
         }
@@ -277,7 +277,7 @@ public class WelcomeScreenActivity extends AppCompatActivity implements Connecti
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.WelcomeScreenActivity$6 */
+    /* renamed from: com.entriver.foodorder.activities.WelcomeScreenActivity$6 */
     class C07696 implements OnClickListener {
         C07696() {
         }
@@ -287,7 +287,7 @@ public class WelcomeScreenActivity extends AppCompatActivity implements Connecti
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.WelcomeScreenActivity$4 */
+    /* renamed from: com.entriver.foodorder.activities.WelcomeScreenActivity$4 */
     class C13774 implements ResultCallback<LocationSettingsResult> {
         C13774() {
         }
@@ -320,17 +320,17 @@ Error: java.lang.NullPointerException
         L_0x000d:
             goto L_0x0015;
         L_0x000e:
-            r0 = com.entriver.orderaround.activities.WelcomeScreenActivity.this;	 Catch:{ SendIntentException -> 0x0015 }
+            r0 = com.entriver.foodorder.activities.WelcomeScreenActivity.this;	 Catch:{ SendIntentException -> 0x0015 }
             r1 = 2000; // 0x7d0 float:2.803E-42 double:9.88E-321;	 Catch:{ SendIntentException -> 0x0015 }
             r3.startResolutionForResult(r0, r1);	 Catch:{ SendIntentException -> 0x0015 }
         L_0x0015:
             return;
             */
-            throw new UnsupportedOperationException("Method not decompiled: com.entriver.orderaround.activities.WelcomeScreenActivity.4.onResult(com.google.android.gms.location.LocationSettingsResult):void");
+            throw new UnsupportedOperationException("Method not decompiled: com.entriver.foodorder.activities.WelcomeScreenActivity.4.onResult(com.google.android.gms.location.LocationSettingsResult):void");
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.WelcomeScreenActivity$5 */
+    /* renamed from: com.entriver.foodorder.activities.WelcomeScreenActivity$5 */
     class C13785 implements OnPageChangeListener {
         C13785() {
         }

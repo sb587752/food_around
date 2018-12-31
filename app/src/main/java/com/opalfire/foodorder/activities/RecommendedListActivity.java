@@ -60,7 +60,7 @@ public class RecommendedListActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
-    /* renamed from: com.entriver.orderaround.activities.RecommendedListActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.RecommendedListActivity$1 */
     class C07571 implements OnClickListener {
         C07571() {
         }

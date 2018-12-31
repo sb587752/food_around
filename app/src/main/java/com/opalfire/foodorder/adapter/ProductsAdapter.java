@@ -257,7 +257,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ViewHolder> {
                 }
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.ProductsAdapter$3$1 */
+            /* renamed from: com.entriver.foodorder.adapter.ProductsAdapter$3$1 */
             class C08161 implements DialogInterface.OnClickListener {
                 C08161() {
                 }
@@ -267,7 +267,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ViewHolder> {
                 }
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.ProductsAdapter$3$2 */
+            /* renamed from: com.entriver.foodorder.adapter.ProductsAdapter$3$2 */
             class C08172 implements DialogInterface.OnClickListener {
                 C08172() {
                 }
@@ -333,7 +333,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ViewHolder> {
                 }
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.ProductsAdapter$6$1 */
+            /* renamed from: com.entriver.foodorder.adapter.ProductsAdapter$6$1 */
             class C08211 implements DialogInterface.OnClickListener {
                 C08211() {
                 }
@@ -343,7 +343,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ViewHolder> {
                 }
             }
 
-            /* renamed from: com.entriver.orderaround.adapter.ProductsAdapter$6$2 */
+            /* renamed from: com.entriver.foodorder.adapter.ProductsAdapter$6$2 */
             class C08222 implements DialogInterface.OnClickListener {
                 C08222() {
                 }
@@ -377,7 +377,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ViewHolder> {
         apiInterface.clearCart().enqueue(new C13847());
     }
 
-    /* renamed from: com.entriver.orderaround.adapter.ProductsAdapter$8 */
+    /* renamed from: com.entriver.foodorder.adapter.ProductsAdapter$8 */
     static class C13858 implements Callback<AddCart> {
         C13858() {
         }
@@ -415,7 +415,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ViewHolder> {
         }
     }
 
-    /* renamed from: com.entriver.orderaround.adapter.ProductsAdapter$7 */
+    /* renamed from: com.entriver.foodorder.adapter.ProductsAdapter$7 */
     class C13847 implements Callback<ClearCart> {
         C13847() {
         }

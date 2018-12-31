@@ -2,7 +2,6 @@ package com.opalfire.foodorder.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,7 +35,6 @@ import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.opalfire.foodorder.HomeActivity;
@@ -386,7 +384,7 @@ public class ProfileFragment extends Fragment {
         button2.setTypeface(button2.getTypeface(), Typeface.BOLD);
     }
 
-    /* renamed from: com.entriver.orderaround.fragments.ProfileFragment$1 */
+    /* renamed from: com.entriver.foodorder.fragments.ProfileFragment$1 */
     class C08481 implements OnClickListener {
         C08481() {
         }
@@ -396,7 +394,7 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    /* renamed from: com.entriver.orderaround.fragments.ProfileFragment$2 */
+    /* renamed from: com.entriver.foodorder.fragments.ProfileFragment$2 */
     class C08492 implements OnClickListener {
         C08492() {
         }
@@ -406,7 +404,7 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    /* renamed from: com.entriver.orderaround.fragments.ProfileFragment$3 */
+    /* renamed from: com.entriver.foodorder.fragments.ProfileFragment$3 */
     class C08503 implements OnItemClickListener {
         C08503() {
         }
