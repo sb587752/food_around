@@ -22,9 +22,9 @@ import butterknife.Unbinder;
 public class RestaurantSearchFragment extends Fragment {
     public static RestaurantsAdapter restaurantsAdapter;
     Context context;
-    @BindView(2131296787)
-    RecyclerView restaurantsRv;
     Unbinder unbinder;
+    @BindView(R.id.restaurants_rv)
+    RecyclerView restaurantsRv;
 
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.fragment_restaurant, viewGroup, false);
@@ -35,7 +35,7 @@ public class RestaurantSearchFragment extends Fragment {
 
     public void onActivityCreated(@Nullable Bundle bundle) {
         super.onActivityCreated(bundle);
-        this.restaurantsRv.setLayoutManager(new LinearLayoutManager(this.context, 1, false));
+        this.restaurantsRv.setLayoutManager(new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false));
         this.restaurantsRv.setItemAnimator(new DefaultItemAnimator());
         this.restaurantsRv.setHasFixedSize(true);
         restaurantsAdapter = new RestaurantsAdapter(GlobalData.searchShopList, this.context, getActivity());

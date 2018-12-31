@@ -89,7 +89,7 @@ public class ManageAddressActivity extends AppCompatActivity {
 
     @OnClick({2131296296})
     public void onViewClicked() {
-        startActivity(new Intent(this, SaveDeliveryLocationActivity.class).addFlags(67108864));
+        startActivity(new Intent(this, SaveDeliveryLocationActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     public void onBackPressed() {

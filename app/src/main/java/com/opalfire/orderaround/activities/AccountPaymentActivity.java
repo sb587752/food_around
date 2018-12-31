@@ -19,19 +19,17 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.opalfire.orderaround.adapter.AccountPaymentAdapter;
+import com.opalfire.orderaround.build.api.ApiClient;
+import com.opalfire.orderaround.build.api.ApiInterface;
+import com.opalfire.orderaround.helper.CustomDialog;
+import com.opalfire.orderaround.helper.GlobalData;
+import com.opalfire.orderaround.models.Card;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.orderaround.user.C0709R;
-import com.orderaround.user.adapter.AccountPaymentAdapter;
-import com.orderaround.user.build.api.ApiClient;
-import com.orderaround.user.build.api.ApiInterface;
-import com.orderaround.user.fragments.CartFragment;
-import com.orderaround.user.helper.CustomDialog;
-import com.orderaround.user.helper.GlobalData;
-import com.orderaround.user.models.Card;
-import com.orderaround.user.models.Message;
-import com.orderaround.user.models.Order;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,28 +43,18 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class AccountPaymentActivity extends AppCompatActivity {
     public static AccountPaymentAdapter accountPaymentAdapter;
-    public static ApiInterface apiInterface = ((ApiInterface) ApiClient.getRetrofit().create(ApiInterface.class));
+    public static ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     public static RadioButton cashCheckBox;
     public static LinearLayout cashPaymentLayout;
     public static Context context;
     public static CustomDialog customDialog;
     public static Button proceedToPayBtn;
     public static LinearLayout walletPaymentLayout;
-    @BindView(2131296297)
-    TextView addNewCart;
     boolean isCashVisible = false;
     boolean isWalletVisible = false;
     private boolean mPurchased = false;
     private boolean mShouldMakePurchase = false;
     NumberFormat numberFormat = GlobalData.getNumberFormat();
-    @BindView(2131296723)
-    ListView paymentMethodLv;
-    @BindView(2131296914)
-    Toolbar toolbar;
-    @BindView(2131296967)
-    TextView walletAmtTxt;
-    @BindView(2131296969)
-    RelativeLayout walletLayout;
 
     /* renamed from: com.orderaround.user.activities.AccountPaymentActivity$1 */
     class C07101 implements OnClickListener {
@@ -146,7 +134,7 @@ public class AccountPaymentActivity extends AppCompatActivity {
                 GlobalData.profileModel.setWalletBalance(((Order) response.body()).getUser().getWalletBalance());
                 GlobalData.isSelectedOrder = new Order();
                 GlobalData.isSelectedOrder = (Order) response.body();
-                AccountPaymentActivity.this.startActivity(new Intent(AccountPaymentActivity.context, CurrentOrderDetailActivity.class).addFlags(67108864));
+                AccountPaymentActivity.this.startActivity(new Intent(AccountPaymentActivity.context, CurrentOrderDetailActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 AccountPaymentActivity.this.finish();
                 return;
             }
@@ -190,13 +178,13 @@ public class AccountPaymentActivity extends AppCompatActivity {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView((int) C0709R.layout.activity_account_payment);
-        ButterKnife.bind((Activity) this);
+        ButterKnife.bind(this);
         context = this;
         customDialog = new CustomDialog(context);
-        cashPaymentLayout = (LinearLayout) findViewById(C0709R.id.cash_payment_layout);
-        walletPaymentLayout = (LinearLayout) findViewById(C0709R.id.wallet_payment_layout);
-        proceedToPayBtn = (Button) findViewById(C0709R.id.proceed_to_pay_btn);
-        cashCheckBox = (RadioButton) findViewById(C0709R.id.cash_check_box);
+        cashPaymentLayout = findViewById(C0709R.id.cash_payment_layout);
+        walletPaymentLayout = findViewById(C0709R.id.wallet_payment_layout);
+        proceedToPayBtn = findViewById(C0709R.id.proceed_to_pay_btn);
+        cashCheckBox = findViewById(C0709R.id.cash_check_box);
         setSupportActionBar(this.toolbar);
         this.toolbar.setNavigationIcon((int) C0709R.drawable.ic_back);
         this.toolbar.setNavigationOnClickListener(new C07101());
@@ -237,7 +225,6 @@ public class AccountPaymentActivity extends AppCompatActivity {
                 if (response.isSuccessful() != null) {
                     call = AccountPaymentActivity.context;
                     StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("");
                     stringBuilder.append(((Message) response.body()).getMessage());
                     response = stringBuilder.toString();
                     int i = 0;

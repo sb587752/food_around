@@ -3,6 +3,7 @@ package com.opalfire.orderaround.CountryPicker;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,12 +23,12 @@ import java.util.Locale;
 
 public class CountryPicker extends DialogFragment {
     private CountryListAdapter adapter;
-    private Context context;
-    private List<Country> countriesList = new ArrayList();
+    private Context mContext;
+    private List<Country> countriesList = new ArrayList<>();
     private ListView countryListView;
     private CountryPickerListener listener;
     private EditText searchEditText;
-    private List<Country> selectedCountriesList = new ArrayList();
+    private List<Country> selectedCountriesList = new ArrayList<>();
 
     public CountryPicker() {
         setCountriesList(Country.getAllCountries());
@@ -41,22 +42,47 @@ public class CountryPicker extends DialogFragment {
         return countryPicker;
     }
 
-    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        layoutInflater = layoutInflater.inflate(R.layout.country_picker, null);
-        viewGroup = getArguments();
-        if (viewGroup != null) {
-            getDialog().setTitle(viewGroup.getString("dialogTitle"));
+    @Override
+    public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        View view = layoutInflater.inflate(R.layout.country_picker, null);
+        mContext = view.getContext();
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            getDialog().setTitle(arguments.getString("dialogTitle"));
             getDialog().getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.cp_dialog_width), getResources().getDimensionPixelSize(R.dimen.cp_dialog_height));
         }
-        this.searchEditText = (EditText) layoutInflater.findViewById(R.id.country_code_picker_search);
-        this.countryListView = (ListView) layoutInflater.findViewById(R.id.country_code_picker_listview);
-        this.selectedCountriesList = new ArrayList(this.countriesList.size());
+        this.searchEditText = view.findViewById(R.id.country_code_picker_search);
+        this.countryListView = view.findViewById(R.id.country_code_picker_listview);
+        this.selectedCountriesList = new ArrayList<>(this.countriesList.size());
         this.selectedCountriesList.addAll(this.countriesList);
         this.adapter = new CountryListAdapter(getActivity(), this.selectedCountriesList);
         this.countryListView.setAdapter(this.adapter);
-        this.countryListView.setOnItemClickListener(new C07031());
-        this.searchEditText.addTextChangedListener(new C07042());
-        return layoutInflater;
+        this.countryListView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (CountryPicker.this.listener != null) {
+                    Country country = CountryPicker.this.selectedCountriesList.get(i);
+                    CountryPicker.this.listener.onSelectCountry(country.getName(), country.getCode(), country.getDialCode(), country.getFlag());
+                }
+            }
+        });
+        this.searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                search(editable.toString());
+            }
+        });
+        return view;
     }
 
     public void setListener(CountryPickerListener countryPickerListener) {
@@ -79,32 +105,5 @@ public class CountryPicker extends DialogFragment {
         this.countriesList.addAll(list);
     }
 
-    /* renamed from: com.entriver.orderaround.CountryPicker.CountryPicker$1 */
-    class C07031 implements OnItemClickListener {
-        C07031() {
-        }
 
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
-            if (CountryPicker.this.listener != null) {
-                Country country = (Country) CountryPicker.this.selectedCountriesList.get(i);
-                CountryPicker.this.listener.onSelectCountry(country.getName(), country.getCode(), country.getDialCode(), country.getFlag());
-            }
-        }
-    }
-
-    /* renamed from: com.entriver.orderaround.CountryPicker.CountryPicker$2 */
-    class C07042 implements TextWatcher {
-        C07042() {
-        }
-
-        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        }
-
-        public void afterTextChanged(Editable editable) {
-            CountryPicker.this.search(editable.toString());
-        }
-    }
 }

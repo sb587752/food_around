@@ -299,14 +299,13 @@ public class Country {
     }
 
     public static Country getCountryByISO(String str) {
-        str = str.toUpperCase();
-        Country country = new Country();
-        country.setCode(str);
-        str = Arrays.binarySearch(COUNTRIES, country, new ISOCodeComparator());
-        if (str < null) {
+        Country country = new Country("", "", "", -1);
+        country.setCode(str.toUpperCase());
+        int search = Arrays.binarySearch(COUNTRIES, country, new ISOCodeComparator());
+        if (search < 0) {
             return null;
         }
-        return COUNTRIES[str];
+        return COUNTRIES[search];
     }
 
     public static Country getCountryByName(String str) {
@@ -323,7 +322,7 @@ public class Country {
     }
 
     public static Country getCountryFromSIM(Context context) {
-        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService("phone");
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return telephonyManager.getSimState() != 1 ? getCountryByISO(telephonyManager.getSimCountryIso()) : null;
     }
 
@@ -366,8 +365,8 @@ public class Country {
                 stringBuilder.append("flag_");
                 stringBuilder.append(this.code.toLowerCase(Locale.ENGLISH));
                 this.flag = resources.getIdentifier(stringBuilder.toString(), "drawable", context.getPackageName());
-            } catch (Context context2) {
-                context2.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
                 this.flag = -1;
             }
         }

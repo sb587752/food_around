@@ -552,7 +552,7 @@ Error: java.lang.NullPointerException
             finish();
             return;
         }
-        startActivity(new Intent(this, HomeActivity.class).addFlags(67108864));
+        startActivity(new Intent(this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
@@ -621,7 +621,7 @@ Error: java.lang.NullPointerException
                     CurrentOrderDetailActivity.this.finish();
                 } else if (response.isSuccessful() != null) {
                     Toast.makeText(CurrentOrderDetailActivity.this.context, ((Message) response.body()).getMessage(), 0).show();
-                    CurrentOrderDetailActivity.this.startActivity(new Intent(CurrentOrderDetailActivity.this.context, HomeActivity.class).addFlags(67108864));
+                    CurrentOrderDetailActivity.this.startActivity(new Intent(CurrentOrderDetailActivity.this.context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     CurrentOrderDetailActivity.this.finish();
                 }
             }

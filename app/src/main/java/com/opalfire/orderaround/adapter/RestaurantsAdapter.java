@@ -129,7 +129,7 @@ public class RestaurantsAdapter extends Adapter<MyViewHolder> {
             if (view.getId() == this.itemView.getId()) {
                 GlobalData.selectedShop = (Shop) RestaurantsAdapter.this.list.get(getAdapterPosition());
                 if (GlobalData.selectedShop.getShopstatus().equalsIgnoreCase("CLOSED") == null) {
-                    RestaurantsAdapter.this.context.startActivity(new Intent(RestaurantsAdapter.this.context, HotelViewActivity.class).putExtra("position", getAdapterPosition()).addFlags(67108864));
+                    RestaurantsAdapter.this.context.startActivity(new Intent(RestaurantsAdapter.this.context, HotelViewActivity.class).putExtra("position", getAdapterPosition()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     RestaurantsAdapter.this.activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                     ((Shop) RestaurantsAdapter.this.list.get(getAdapterPosition())).getCuisines();
                     return;

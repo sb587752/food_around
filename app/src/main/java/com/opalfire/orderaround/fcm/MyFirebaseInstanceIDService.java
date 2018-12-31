@@ -1,25 +1,16 @@
 package com.opalfire.orderaround.fcm;
 
-import android.util.Log;
-
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.opalfire.orderaround.helper.SharedHelper;
 
-public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
+public class MyFirebaseInstanceIDService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseInstanceIDService";
 
-    public void onTokenRefresh() {
-        super.onTokenRefresh();
-        String token = FirebaseInstanceId.getInstance().getToken();
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("");
-        stringBuilder.append(token);
-        SharedHelper.putKey(getApplicationContext(), "device_token", stringBuilder.toString());
-        String str = TAG;
-        StringBuilder stringBuilder2 = new StringBuilder();
-        stringBuilder2.append("");
-        stringBuilder2.append(token);
-        Log.e(str, stringBuilder2.toString());
+    @Override
+    public void onNewToken(String mToken) {
+        super.onNewToken(mToken);
+        SharedHelper.putKey(getApplicationContext(), "device_token", mToken);
     }
+
+
 }
