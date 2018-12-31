@@ -110,6 +110,7 @@ public class AccountPaymentActivity extends AppCompatActivity {
         });
     }
 
+    @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_account_payment);
@@ -248,6 +249,7 @@ public class AccountPaymentActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(context));
     }
 
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
@@ -267,6 +269,7 @@ public class AccountPaymentActivity extends AppCompatActivity {
         super.onSaveInstanceState(bundle, persistableBundle);
     }
 
+    @Override
     protected void onResume() {
         super.onResume();
         int intValue = GlobalData.profileModel.getWalletBalance();
