@@ -11,7 +11,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class SecretKeyActivity extends AppCompatActivity {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView((int) R.layout.activity_secret_key);
+        setContentView(R.layout.activity_secret_key);
     }
 
     protected void attachBaseContext(Context context) {
