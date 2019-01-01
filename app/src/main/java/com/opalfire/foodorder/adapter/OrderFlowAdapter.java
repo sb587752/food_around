@@ -19,14 +19,14 @@ import com.opalfire.foodorder.models.OrderFlow;
 
 import java.util.List;
 
-public class OrderFlowAdapter extends Adapter<MyViewHolder> {
+public class OrderFlowAdapter extends Adapter<OrderFlowAdapter.MyViewHolder> {
     public String orderStatus = "";
     private Context context;
     private List<OrderFlow> list;
 
     public OrderFlowAdapter(List<OrderFlow> list, Context context) {
-        this.list = list;
-        this.context = context;
+        list = list;
+        context = context;
     }
 
     public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -34,23 +34,23 @@ public class OrderFlowAdapter extends Adapter<MyViewHolder> {
     }
 
     public void add(OrderFlow orderFlow, int i) {
-        this.list.add(i, orderFlow);
+        list.add(i, orderFlow);
         notifyItemInserted(i);
     }
 
     public void remove(OrderFlow orderFlow) {
-        orderFlow = this.list.indexOf(orderFlow);
-        this.list.remove(orderFlow);
+        orderFlow = list.indexOf(orderFlow);
+        list.remove(orderFlow);
         notifyItemRemoved(orderFlow);
     }
 
     public void onBindViewHolder(MyViewHolder myViewHolder, int i) {
-        OrderFlow orderFlow = (OrderFlow) this.list.get(i);
+        OrderFlow orderFlow = (OrderFlow) list.get(i);
         myViewHolder.statusTitle.setText(orderFlow.statusTitle);
         myViewHolder.statusDescription.setText(orderFlow.statusDescription);
         myViewHolder.statusImage.setImageResource(orderFlow.statusImage);
         if (orderFlow.status.contains(GlobalData.isSelectedOrder.getStatus())) {
-            myViewHolder.statusTitle.setTextColor(ContextCompat.getColor(this.context, R.color.colorTextBlack));
+            myViewHolder.statusTitle.setTextColor(ContextCompat.getColor(context, R.color.colorTextBlack));
             if (GlobalData.isSelectedOrder.getStatus().equals(GlobalData.ORDER_STATUS.get(GlobalData.ORDER_STATUS.size() - 1))) {
                 new Handler().postDelayed(new C08081(), 2000);
             }
@@ -60,9 +60,9 @@ public class OrderFlowAdapter extends Adapter<MyViewHolder> {
                 CurrentOrderDetailActivity.orderCancelTxt.setVisibility(View.GONE);
             }
         } else {
-            myViewHolder.statusTitle.setTextColor(ContextCompat.getColor(this.context, R.color.colorSecondaryText));
+            myViewHolder.statusTitle.setTextColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
         }
-        if (this.list.size() == i + 1) {
+        if (list.size() == i + 1) {
             myViewHolder.viewLine.setVisibility(View.GONE);
         } else {
             myViewHolder.viewLine.setVisibility(View.VISIBLE);
@@ -70,7 +70,7 @@ public class OrderFlowAdapter extends Adapter<MyViewHolder> {
     }
 
     public int getItemCount() {
-        return this.list.size();
+        return list.size();
     }
 
     /* renamed from: com.entriver.foodorder.adapter.OrderFlowAdapter$1 */
@@ -79,7 +79,7 @@ public class OrderFlowAdapter extends Adapter<MyViewHolder> {
         }
 
         public void run() {
-            ((CurrentOrderDetailActivity) OrderFlowAdapter.this.context).rate();
+            ((CurrentOrderDetailActivity) OrderFlowAdapter.context).rate();
         }
     }
 
@@ -91,10 +91,10 @@ public class OrderFlowAdapter extends Adapter<MyViewHolder> {
 
         private MyViewHolder(View view) {
             super(view);
-            this.statusImage = (ImageView) view.findViewById(R.id.order_status_img);
-            this.statusTitle = (TextView) view.findViewById(R.id.order_status_title);
-            this.statusDescription = (TextView) view.findViewById(R.id.order_status_description);
-            this.viewLine = view.findViewById(R.id.view_line);
+            statusImage = (ImageView) view.findViewById(R.id.order_status_img);
+            statusTitle = (TextView) view.findViewById(R.id.order_status_title);
+            statusDescription = (TextView) view.findViewById(R.id.order_status_description);
+            viewLine = view.findViewById(R.id.view_line);
         }
 
         public void onClick(View view) {
