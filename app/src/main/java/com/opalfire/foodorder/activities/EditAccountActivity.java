@@ -1,18 +1,21 @@
 package com.opalfire.foodorder.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.provider.MediaStore.Images.Media;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -33,11 +36,13 @@ import com.opalfire.foodorder.models.User;
 import com.opalfire.foodorder.utils.TextUtils;
 import com.opalfire.foodorder.utils.Utils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,66 +57,76 @@ import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class EditAccountActivity extends AppCompatActivity {
-    static final /* synthetic */ boolean $assertionsDisabled = false;
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 0;
     String TAG = "EditAccountActivity";
     Activity activity;
-    ApiInterface apiInterface = ((ApiInterface) ApiClient.getRetrofit().create(ApiInterface.class));
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     ConnectionHelper connectionHelper;
     Context context;
     CustomDialog customDialog;
     String device_UDID;
     String device_token;
-    @BindView(2131296507)
-    ImageView editUserProfileImg;
-    @BindView(2131296508)
-    EditText email;
-    File imgFile;
-    @BindView(2131296659)
-    EditText name;
-    @BindView(2131296729)
-    EditText phone;
-    @BindView(2131296914)
-    Toolbar toolbar;
-    @BindView(2131296940)
-    Button updateBtn;
-    @BindView(2131296949)
-    CircleImageView userProfileImg;
+
     Utils utils = new Utils();
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.user_profile)
+    CircleImageView userProfile;
+    @BindView(R.id.edit_user_profile)
+    ImageView editUserProfile;
+    @BindView(R.id.name)
+    EditText name;
+    @BindView(R.id.phone)
+    EditText phone;
+    @BindView(R.id.email)
+    EditText email;
+    @BindView(R.id.update)
+    Button update;
+    File imgFile;
     private int PICK_IMAGE_REQUEST = 1;
 
+    @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView((int) R.layout.activity_edit_account);
+        setContentView(R.layout.activity_edit_account);
         getWindow().setFlags(1024, 1024);
-        ButterKnife.bind((Activity) this);
-        this.customDialog = new CustomDialog(this);
-        this.context = this;
-        this.activity = this;
+        ButterKnife.bind(this);
+        customDialog = new CustomDialog(this);
+        context = this;
+        activity = this;
         initProfile();
-        this.connectionHelper = new ConnectionHelper(this.context);
-        if (this.connectionHelper.isConnectingToInternet() != null) {
+        connectionHelper = new ConnectionHelper(context);
+        if (connectionHelper.isConnectingToInternet()) {
             getProfile();
         } else {
-            Utils.displayMessage(this.activity, this.context, getString(R.string.oops_connect_your_internet));
+            Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
         }
         getProfile();
         getDeviceToken();
-        setSupportActionBar(this.toolbar);
-        this.toolbar.setNavigationIcon((int) R.drawable.ic_back);
-        this.toolbar.setNavigationOnClickListener(new C07261());
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_back);
+        toolbar.setNavigationOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     private void initProfile() {
         if (GlobalData.profileModel != null) {
-            this.name.setText(GlobalData.profileModel.getName());
-            this.email.setText(GlobalData.profileModel.getEmail());
-            this.phone.setText(GlobalData.profileModel.getPhone());
+            name.setText(GlobalData.profileModel.getName());
+            email.setText(GlobalData.profileModel.getEmail());
+            phone.setText(GlobalData.profileModel.getPhone());
             System.out.println(GlobalData.profileModel.getAvatar());
-            Glide.with(this.context).load(GlobalData.profileModel.getAvatar()).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).placeholder((int) R.drawable.man).error((int) R.drawable.man)).into(this.userProfileImg);
+            Glide.with(context).load(GlobalData.profileModel.getAvatar()).
+                    apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).
+                            placeholder(R.drawable.man).error(R.drawable.man))
+                    .into(userProfile);
         }
     }
 
+    @SuppressLint("HardwareIds")
     public void getDeviceToken() {
         /* JADX: method processing error */
 /*
@@ -225,66 +240,102 @@ Error: java.lang.NullPointerException
     }
 
     private void getProfile() {
-        HashMap hashMap = new HashMap();
+        HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("device_type", "android");
-        hashMap.put("device_id", this.device_UDID);
-        hashMap.put("device_token", this.device_token);
-        this.apiInterface.getProfile(hashMap).enqueue(new C12912());
+        hashMap.put("device_id", device_UDID);
+        hashMap.put("device_token", device_token);
+        apiInterface.getProfile(hashMap).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                if (response.isSuccessful()) {
+                    GlobalData.profileModel = response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
     }
 
     private void updateProfile() {
-        if (this.name.getText().toString().isEmpty()) {
-            Toast.makeText(this, getResources().getString(R.string.please_enter_username), 0).show();
-        } else if (TextUtils.isEmpty(this.email.getText().toString())) {
-            Toast.makeText(this, getResources().getString(R.string.please_enter_your_email), 0).show();
-        } else if (TextUtils.isValidEmail(this.email.getText().toString())) {
-            if (this.customDialog != null) {
-                this.customDialog.show();
+        if (name.getText().toString().isEmpty()) {
+            Toast.makeText(this, getResources().getString(R.string.please_enter_username), Toast.LENGTH_LONG).show();
+        } else if (TextUtils.isEmpty(email.getText().toString())) {
+            Toast.makeText(this, getResources().getString(R.string.please_enter_your_email), Toast.LENGTH_LONG).show();
+        } else if (TextUtils.isValidEmail(email.getText().toString())) {
+            if (customDialog != null) {
+                customDialog.show();
             }
-            Map hashMap = new HashMap();
-            hashMap.put("name", RequestBody.create(MediaType.parse("text/plain"), this.name.getText().toString()));
-            hashMap.put("email", RequestBody.create(MediaType.parse("text/plain"), this.email.getText().toString()));
+            Map<String, RequestBody> hashMap = new HashMap<>();
+            hashMap.put("name", RequestBody.create(MediaType.parse("text/plain"), name.getText().toString()));
+            hashMap.put("email", RequestBody.create(MediaType.parse("text/plain"), email.getText().toString()));
             Part part = null;
-            if (this.imgFile != null) {
-                part = Part.createFormData("avatar", this.imgFile.getName(), RequestBody.create(MediaType.parse("image/*"), this.imgFile));
+            if (imgFile != null) {
+                part = Part.createFormData("avatar", imgFile.getName(), RequestBody.create(MediaType.parse("image/*"), imgFile));
             }
-            this.apiInterface.updateProfileWithImage(hashMap, part).enqueue(new C12923());
+            apiInterface.updateProfileWithImage(hashMap, part).enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.isSuccessful()) {
+                        GlobalData.profileModel = response.body();
+                        finish();
+                        Toast.makeText(context, getResources().getString(R.string.profile_updated_successfully), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    try {
+                        Toast.makeText(context, new JSONObject(Objects.requireNonNull(response.errorBody()).toString()).optString("error"), Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+
+                }
+            });
         } else {
-            Toast.makeText(this, getResources().getString(R.string.please_enter_valid_email), 0).show();
+            Toast.makeText(this, getResources().getString(R.string.please_enter_valid_email), Toast.LENGTH_LONG).show();
         }
     }
 
     public void goToImageIntent() {
-        startActivityForResult(new Intent("android.intent.action.PICK", Media.EXTERNAL_CONTENT_URI), this.PICK_IMAGE_REQUEST);
+        startActivityForResult(
+                new Intent("android.intent.action.PICK", Media.EXTERNAL_CONTENT_URI), PICK_IMAGE_REQUEST);
     }
 
+    @Override
     protected void onActivityResult(int i, int i2, Intent intent) {
         super.onActivityResult(i, i2, intent);
-        if (i == this.PICK_IMAGE_REQUEST && i2 == -1 && intent != null && intent.getData() != 0) {
-            i = new String[]{"_data"};
-            i2 = getContentResolver().query(intent.getData(), i, null, null, null);
-            i2.moveToFirst();
-            String string = i2.getString(i2.getColumnIndex(i[null]));
-            i2.close();
-            Glide.with((FragmentActivity) this).load(string).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).placeholder((int) R.drawable.man).error((int) R.drawable.man)).into(this.userProfileImg);
-            this.imgFile = new File(string);
+        if (i == PICK_IMAGE_REQUEST && i2 == -1 && intent != null && intent.getData() != null) {
+            String[] str = new String[]{"_data"};
+            Cursor cursor = getContentResolver().query(intent.getData(), str, null, null, null);
+            cursor.moveToFirst();
+            String string = cursor.getString(cursor.getColumnIndex(str[i]));
+            cursor.close();
+            Glide.with(this).load(string)
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .placeholder(R.drawable.man).error(R.drawable.man))
+                    .into(editUserProfile);
+            imgFile = new File(string);
         }
     }
 
-    @OnClick({2131296507, 2131296940})
+    @OnClick({R.id.edit_user_profile, R.id.update})
     public void onViewClicked(View view) {
-        view = view.getId();
-        if (view != R.id.edit_user_profile) {
-            if (view == R.id.update) {
-                if (this.connectionHelper.isConnectingToInternet() != null) {
+        if (view.getId() != R.id.edit_user_profile) {
+            if (view.getId() == R.id.update) {
+                if (connectionHelper.isConnectingToInternet()) {
                     updateProfile();
                 } else {
-                    Utils.displayMessage(this.activity, this.context, getString(R.string.oops_connect_your_internet));
+                    Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
                 }
             }
         } else if (VERSION.SDK_INT < 23) {
             goToImageIntent();
-        } else if (ContextCompat.checkSelfPermission(this, "android.permission.READ_EXTERNAL_STORAGE") == null && ContextCompat.checkSelfPermission(this, "android.permission.CAMERA") == null) {
+        } else if (ContextCompat.checkSelfPermission(this, "android.permission.READ_EXTERNAL_STORAGE") > 0 && ContextCompat.checkSelfPermission(this, "android.permission.CAMERA") > 0) {
             goToImageIntent();
         } else {
             requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.CAMERA"}, 0);
@@ -297,6 +348,7 @@ Error: java.lang.NullPointerException
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
+    @Override
     protected void attachBaseContext(Context context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(context));
     }
@@ -345,10 +397,12 @@ Error: java.lang.NullPointerException
 
         public void onFailure(@NonNull Call<User> call, @NonNull Throwable th) {
         }
-
-        public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
-            if (response.isSuccessful() != null) {
-                GlobalData.profileModel = (User) response.body();
+        if (paramArrayOfInt.length > 0) {
+            int i = 1;
+            if (paramArrayOfInt[1] == 0) {
+                paramInt = 1;
+            } else {
+                paramInt = 0;
             }
         }
     }
@@ -366,16 +420,18 @@ Error: java.lang.NullPointerException
                 Toast.makeText(EditAccountActivity.this.context, EditAccountActivity.this.getResources().getString(R.string.profile_updated_successfully), 0).show();
                 return;
             }
-            try {
-                Toast.makeText(EditAccountActivity.this.context, new JSONObject(response.errorBody().toString()).optString("error"), 1).show();
-            } catch (Response<User> response2) {
-                Toast.makeText(EditAccountActivity.this.context, response2.getMessage(), 1).show();
+            if ((paramInt != 0) && (i != 0)) {
+                goToImageIntent();
+                return;
             }
-        }
-
-        public void onFailure(@NonNull Call<User> call, @NonNull Throwable th) {
-            EditAccountActivity.this.customDialog.cancel();
-            Toast.makeText(EditAccountActivity.this.context, EditAccountActivity.this.getResources().getString(R.string.network_error_toast), 0).show();
+            Snackbar.make(findViewById(android.R.id.content), "Please Grant Permissions to upload Profile", -2).setAction("ENABLE", new View.OnClickListener() {
+                @Override
+                public void onClick(View paramAnonymousView) {
+                    ActivityCompat.requestPermissions(EditAccountActivity.this, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.CAMERA"}, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
+                }
+            }).show();
         }
     }
+
+
 }
