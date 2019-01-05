@@ -54,6 +54,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CameraPosition.Builder;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.opalfire.orderaround.HomeActivity;
 import com.opalfire.orderaround.R;
@@ -89,7 +90,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     EditText addressEdit;
     @BindView(2131296322)
     ImageView animationLineCartAdd;
-    ApiInterface apiInterface = ((ApiInterface) ApiClient.getRetrofit().create(ApiInterface.class));
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     AnimatedVectorDrawableCompat avdProgress;
     @BindView(2131296335)
     ImageView backArrow;
@@ -145,80 +146,83 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     private Double srcLng;
     private int value = 0;
 
+    @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
     }
 
+    @Override
     public void onConnectionSuspended(int i) {
     }
 
+    @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_save_delivery_location);
         getWindow().setFlags(1024, 1024);
-        ButterKnife.bind((Activity) this);
-        this.context = this;
-        this.address = new Address();
-        this.customDialog = new CustomDialog(this.context);
-        this.address.setType(FacebookRequestErrorClassification.KEY_OTHER);
+        ButterKnife.bind(this);
+        context = this;
+        address = new Address();
+        customDialog = new CustomDialog(context);
+        address.setType(FacebookRequestErrorClassification.KEY_OTHER);
         initializeAvd();
-        this.mFusedLocationClient = LocationServices.getFusedLocationProviderClient((Activity) this);
-        this.slide_down = AnimationUtils.loadAnimation(this.context, R.anim.slide_down);
-        this.slide_up = AnimationUtils.loadAnimation(this.context, R.anim.slide_up);
-        this.isAddressSave = getIntent().getBooleanExtra("get_address", false);
-        this.isSkipVisible = getIntent().getBooleanExtra("skip_visible", false);
-        if (this.isSkipVisible != null) {
-            this.skipTxt.setVisibility(View.VISIBLE);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        slide_down = AnimationUtils.loadAnimation(context, R.anim.slide_down);
+        slide_up = AnimationUtils.loadAnimation(context, R.anim.slide_up);
+        isAddressSave = getIntent().getBooleanExtra("get_address", false);
+        isSkipVisible = getIntent().getBooleanExtra("skip_visible", false);
+        if (isSkipVisible) {
+            skipTxt.setVisibility(View.VISIBLE);
         } else {
-            this.skipTxt.setVisibility(View.GONE);
+            skipTxt.setVisibility(View.GONE);
         }
         if (VERSION.SDK_INT < 23) {
             buildGoogleApiClient();
-            this.mFusedLocationClient.getLastLocation().addOnSuccessListener((Activity) this, new C13492());
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new C13492());
         } else if (ContextCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION") == null) {
             buildGoogleApiClient();
-            this.mFusedLocationClient.getLastLocation().addOnSuccessListener((Activity) this, new C13481());
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new C13481());
         }
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
-        this.behavior = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet));
-        this.behavior.setState(3);
-        this.dummyImageView.setVisibility(View.VISIBLE);
-        this.behavior.setBottomSheetCallback(new C13503());
-        this.otherRadio.setOnClickListener(new C07584());
-        this.typeRadiogroup.setOnCheckedChangeListener(new C07595());
+        behavior = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet));
+        behavior.setState(3);
+        dummyImageView.setVisibility(View.VISIBLE);
+        behavior.setBottomSheetCallback(new C13503());
+        otherRadio.setOnClickListener(new C07584());
+        typeRadiogroup.setOnCheckedChangeListener(new C07595());
         bundle = getIntent().getExtras();
         if (bundle != null) {
             String string = bundle.getString("place_id");
             bundle = bundle.getString("edit");
             if (string != null) {
-                Places.GeoDataApi.getPlaceById(this.mGoogleApiClient, string).setResultCallback(new C13516());
+                Places.GeoDataApi.getPlaceById(mGoogleApiClient, string).setResultCallback(new C13516());
             }
-            if (bundle != null && bundle.equals("yes") != null && GlobalData.selectedAddress != null) {
-                this.address = GlobalData.selectedAddress;
-                this.addressEdit.setText(this.address.getMapAddress());
-                this.flatNoEdit.setText(this.address.getBuilding());
-                this.landmark.setText(this.address.getLandmark());
-                bundle = this.address.getType();
+            if (bundle != null && bundle.equals("yes") && GlobalData.selectedAddress != null) {
+                address = GlobalData.selectedAddress;
+                addressEdit.setText(address.getMapAddress());
+                flatNoEdit.setText(address.getBuilding());
+                landmark.setText(address.getLandmark());
+                bundle = address.getType();
                 Object obj = -1;
                 int hashCode = bundle.hashCode();
                 if (hashCode != 3208415) {
                     if (hashCode == 3655441) {
-                        if (bundle.equals("work") != null) {
+                        if (bundle.equals("work")) {
                             obj = 1;
                         }
                     }
-                } else if (bundle.equals("home") != null) {
+                } else if (bundle.equals("home")) {
                     obj = null;
                 }
                 switch (obj) {
                     case null:
-                        this.homeRadio.setChecked(true);
+                        homeRadio.setChecked(true);
                         return;
                     case 1:
-                        this.workRadio.setChecked(true);
+                        workRadio.setChecked(true);
                         return;
                     default:
-                        this.otherAddressHeaderEt.setText(this.address.getType());
-                        this.otherRadio.setChecked(true);
+                        otherAddressHeaderEt.setText(address.getType());
+                        otherRadio.setChecked(true);
                         return;
                 }
             }
@@ -226,101 +230,57 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     }
 
     private void initializeAvd() {
-        this.avdProgress = AnimatedVectorDrawableCompat.create(getApplicationContext(), R.drawable.avd_line);
-        this.animationLineCartAdd.setBackground(this.avdProgress);
+        avdProgress = AnimatedVectorDrawableCompat.create(getApplicationContext(), R.drawable.avd_line);
+        animationLineCartAdd.setBackground(avdProgress);
         repeatAnimation();
     }
 
     private void repeatAnimation() {
-        this.animationLineCartAdd.setVisibility(View.VISIBLE);
-        this.avdProgress.start();
-        this.animationLineCartAdd.postDelayed(this.action, 1500);
+        animationLineCartAdd.setVisibility(View.VISIBLE);
+        avdProgress.start();
+        animationLineCartAdd.postDelayed(action, 1500);
     }
 
-    public void onMapReady(com.google.android.gms.maps.GoogleMap r3) {
-        /* JADX: method processing error */
-/*
-Error: java.lang.NullPointerException
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.searchTryCatchDominators(ProcessTryCatchRegions.java:75)
-	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.process(ProcessTryCatchRegions.java:45)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.postProcessRegions(RegionMakerVisitor.java:63)
-	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:58)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:56)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-	at jadx.api.JadxDecompiler$$Lambda$8/193388045.run(Unknown Source)
-*/
-        /*
-        r2 = this;
-        r0 = 2131755013; // 0x7f100005 float:1.9140893E38 double:1.0532269173E-314;
-        r0 = com.google.android.gms.maps.model.MapStyleOptions.loadRawResourceStyle(r2, r0);	 Catch:{ NotFoundException -> 0x001d }
-        r0 = r3.setMapStyle(r0);	 Catch:{ NotFoundException -> 0x001d }
-        if (r0 != 0) goto L_0x0015;	 Catch:{ NotFoundException -> 0x001d }
-    L_0x000d:
-        r0 = "Map:Style";	 Catch:{ NotFoundException -> 0x001d }
-        r1 = "Style parsing failed.";	 Catch:{ NotFoundException -> 0x001d }
-        android.util.Log.i(r0, r1);	 Catch:{ NotFoundException -> 0x001d }
-        goto L_0x0024;	 Catch:{ NotFoundException -> 0x001d }
-    L_0x0015:
-        r0 = "Map:Style";	 Catch:{ NotFoundException -> 0x001d }
-        r1 = "Style Applied.";	 Catch:{ NotFoundException -> 0x001d }
-        android.util.Log.i(r0, r1);	 Catch:{ NotFoundException -> 0x001d }
-        goto L_0x0024;
-    L_0x001d:
-        r0 = "Map:Style";
-        r1 = "Can't find style. Error: ";
-        android.util.Log.i(r0, r1);
-    L_0x0024:
-        r2.mMap = r3;
-        r3 = r2.mMap;
-        if (r3 == 0) goto L_0x0056;
-    L_0x002a:
-        r3 = r2.mMap;
-        r3 = r3.getUiSettings();
-        r0 = 0;
-        r3.setCompassEnabled(r0);
-        r3 = r2.mMap;
-        r1 = 1;
-        r3.setBuildingsEnabled(r1);
-        r3 = r2.mMap;
-        r3.setOnCameraMoveListener(r2);
-        r3 = r2.mMap;
-        r3.setOnCameraIdleListener(r2);
-        r3 = r2.mMap;
-        r3 = r3.getUiSettings();
-        r3.setRotateGesturesEnabled(r0);
-        r3 = r2.mMap;
-        r3 = r3.getUiSettings();
-        r3.setTiltGesturesEnabled(r0);
-    L_0x0056:
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.entriver.orderaround.activities.SaveDeliveryLocationActivity.onMapReady(com.google.android.gms.maps.GoogleMap):void");
+    public void onMapReady(GoogleMap googleMap) {
+        try {
+            if (!googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json))) {
+                Log.i("Map:Style", "Style parsing failed.");
+            } else {
+                Log.i("Map:Style", "Style Applied.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.i("Map:Style", "Can't find style. Error: ");
+        this.mMap = googleMap;
+        if (this.mMap != null) {
+            this.mMap.getUiSettings().setCompassEnabled(false);
+            this.mMap.setBuildingsEnabled(true);
+            this.mMap.setOnCameraMoveListener(this);
+            this.mMap.setOnCameraIdleListener(this);
+            this.mMap.getUiSettings().setRotateGesturesEnabled(false);
+            this.mMap.getUiSettings().setTiltGesturesEnabled(false);
+        }
     }
 
     protected synchronized void buildGoogleApiClient() {
-        this.mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(Places.GEO_DATA_API).addApi(LocationServices.API).build();
-        this.mGoogleApiClient.connect();
+        mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(Places.GEO_DATA_API).addApi(LocationServices.API).build();
+        mGoogleApiClient.connect();
     }
 
     public void onLocationChanged(Location location) {
         System.out.println("onLocationChanged ");
-        if (this.value == 0) {
-            this.value = 1;
-            if (this.address.getId() == null) {
-                this.mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(16.0f).build()));
+        if (value == 0) {
+            value = 1;
+            if (address.getId() == null) {
+                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(16.0f).build()));
             } else {
-                this.mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(new LatLng(this.address.getLatitude().doubleValue(), this.address.getLongitude().doubleValue())).zoom(16.0f).build()));
+                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(new LatLng(address.getLatitude().doubleValue(), address.getLongitude().doubleValue())).zoom(16.0f).build()));
             }
             getAddress(location.getLatitude(), location.getLongitude());
         }
-        this.crtLat = Double.valueOf(location.getLatitude());
-        this.crtLng = Double.valueOf(location.getLongitude());
+        crtLat = Double.valueOf(location.getLatitude());
+        crtLng = Double.valueOf(location.getLongitude());
     }
 
     private void getAddress(double d, double d2) {
@@ -334,7 +294,7 @@ Error: java.lang.NullPointerException
         try {
             List fromLocation = new Geocoder(this, Locale.getDefault()).getFromLocation(d, d2, 1);
             if (fromLocation == null || fromLocation.size() <= 0) {
-                getAddress(this.context, d, d2);
+                getAddress(context, d, d2);
                 return;
             }
             android.location.Address address = (android.location.Address) fromLocation.get(View.VISIBLE);
@@ -342,31 +302,29 @@ Error: java.lang.NullPointerException
             if (address.getMaxAddressLineIndex() > 0) {
                 for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
                     stringBuilder2.append(address.getAddressLine(i));
-                    stringBuilder2.append("");
                 }
             } else {
                 stringBuilder2.append(address.getAddressLine(0));
-                stringBuilder2.append("");
             }
-            this.addressEdit.setText(stringBuilder2.toString());
+            addressEdit.setText(stringBuilder2.toString());
             android.location.Address address2 = (android.location.Address) fromLocation.get(View.VISIBLE);
-            this.address.setCity(address2.getLocality());
-            this.address.setState(address2.getAdminArea());
-            this.address.setCountry(address2.getCountryName());
-            this.address.setLatitude(Double.valueOf(address2.getLatitude()));
-            this.address.setLongitude(Double.valueOf(address2.getLongitude()));
-            this.address.setPincode(address2.getPostalCode());
-            this.addressHeader = address2.getFeatureName();
+            address.setCity(address2.getLocality());
+            address.setState(address2.getAdminArea());
+            address.setCountry(address2.getCountryName());
+            address.setLatitude(Double.valueOf(address2.getLatitude()));
+            address.setLongitude(Double.valueOf(address2.getLongitude()));
+            address.setPincode(address2.getPostalCode());
+            addressHeader = address2.getFeatureName();
         } catch (Exception e) {
             e.printStackTrace();
-            getAddress(this.context, d, d2);
+            getAddress(context, d, d2);
         }
     }
 
     public void getAddress(Context context, double d, double d2) {
-        this.retrofit = new Retrofit.Builder().baseUrl("https://maps.googleapis.com/maps/api/geocode/").addConverterFactory(GsonConverterFactory.create()).build();
-        this.apiInterface = (ApiInterface) this.retrofit.create(ApiInterface.class);
-        ApiInterface apiInterface = this.apiInterface;
+        retrofit = new Retrofit.Builder().baseUrl("https://maps.googleapis.com/maps/api/geocode/").addConverterFactory(GsonConverterFactory.create()).build();
+        apiInterface = retrofit.create(ApiInterface.class);
+        ApiInterface apiInterface = apiInterface;
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(d);
         stringBuilder.append(",");
@@ -382,7 +340,7 @@ Error: java.lang.NullPointerException
                 Log.e("sUCESS", stringBuilder.toString());
                 if (response.body() != null) {
                     try {
-                        call = new String(((ResponseBody) response.body()).bytes());
+                        call = new String(response.body().bytes());
                         stringBuilder = new StringBuilder();
                         stringBuilder.append("bodyString");
                         stringBuilder.append(call);
@@ -391,24 +349,24 @@ Error: java.lang.NullPointerException
                         if (call.length() > null) {
                             JSONArray optJSONArray = call.optJSONObject(0).optJSONArray("address_components");
                             optJSONArray.optJSONObject(0).optString("long_name");
-                            SaveDeliveryLocationActivity.this.address.setCity(optJSONArray.optJSONObject(2).optString("long_name"));
-                            SaveDeliveryLocationActivity.this.address.setState(optJSONArray.optJSONObject(3).optString("long_name"));
+                            address.setCity(optJSONArray.optJSONObject(2).optString("long_name"));
+                            address.setState(optJSONArray.optJSONObject(3).optString("long_name"));
                             if (optJSONArray.optJSONObject(4).optString("long_name") != null) {
-                                SaveDeliveryLocationActivity.this.address.setCountry(optJSONArray.optJSONObject(4).optString("long_name"));
+                                address.setCountry(optJSONArray.optJSONObject(4).optString("long_name"));
                             }
-                            SaveDeliveryLocationActivity.this.address.setLatitude(Double.valueOf(d3));
-                            SaveDeliveryLocationActivity.this.address.setLongitude(Double.valueOf(d4));
-                            SaveDeliveryLocationActivity.this.address.setPincode(optJSONArray.optJSONObject(5).optString("long_name"));
-                            SaveDeliveryLocationActivity.this.addressHeader = optJSONArray.optJSONObject(0).optString("long_name");
+                            address.setLatitude(Double.valueOf(d3));
+                            address.setLongitude(Double.valueOf(d4));
+                            address.setPincode(optJSONArray.optJSONObject(5).optString("long_name"));
+                            addressHeader = optJSONArray.optJSONObject(0).optString("long_name");
                             call = call.optJSONObject(0).optString("formatted_address");
-                            SaveDeliveryLocationActivity.this.addressEdit.setText(call);
-                            SaveDeliveryLocationActivity.this.addressHeader = call;
+                            addressEdit.setText(call);
+                            addressHeader = call;
                             response = new StringBuilder();
                             response.append("");
                             response.append(GlobalData.addressHeader);
                             Log.v("Formatted Address", response.toString());
                         } else {
-                            call = SaveDeliveryLocationActivity.this;
+                            call = this;
                             response = new StringBuilder();
                             response.append("");
                             response.append(d3);
@@ -422,7 +380,7 @@ Error: java.lang.NullPointerException
                         call22.printStackTrace();
                     }
                 } else {
-                    call22 = SaveDeliveryLocationActivity.this;
+                    call22 = this;
                     response = new StringBuilder();
                     response.append("");
                     response.append(d3);
@@ -440,7 +398,7 @@ Error: java.lang.NullPointerException
                 stringBuilder.append("onFailure");
                 stringBuilder.append(call.request().url());
                 Log.e("onFailure", stringBuilder.toString());
-                call = SaveDeliveryLocationActivity.this;
+                call = this;
                 th = new StringBuilder();
                 th.append("");
                 th.append(d3);
@@ -453,36 +411,36 @@ Error: java.lang.NullPointerException
 
     public void onCameraIdle() {
         try {
-            CameraPosition cameraPosition = this.mMap.getCameraPosition();
-            this.srcLat = Double.valueOf(cameraPosition.target.latitude);
-            this.srcLng = Double.valueOf(cameraPosition.target.longitude);
+            CameraPosition cameraPosition = mMap.getCameraPosition();
+            srcLat = Double.valueOf(cameraPosition.target.latitude);
+            srcLng = Double.valueOf(cameraPosition.target.longitude);
             initializeAvd();
-            getAddress(this.srcLat.doubleValue(), this.srcLng.doubleValue());
-            this.skipTxt.setAlpha(1.0f);
-            this.skipTxt.setClickable(true);
-            this.skipTxt.setEnabled(true);
+            getAddress(srcLat.doubleValue(), srcLng.doubleValue());
+            skipTxt.setAlpha(1.0f);
+            skipTxt.setClickable(true);
+            skipTxt.setEnabled(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void onCameraMove() {
-        this.behavior.setState(4);
-        this.dummyImageView.setVisibility(View.GONE);
-        this.addressEdit.setText(getResources().getString(R.string.getting_address));
-        this.animationLineCartAdd.setVisibility(View.VISIBLE);
-        this.skipTxt.setAlpha(0.5f);
-        this.skipTxt.setClickable(false);
-        this.skipTxt.setEnabled(false);
+        behavior.setState(4);
+        dummyImageView.setVisibility(View.GONE);
+        addressEdit.setText(getResources().getString(R.string.getting_address));
+        animationLineCartAdd.setVisibility(View.VISIBLE);
+        skipTxt.setAlpha(0.5f);
+        skipTxt.setClickable(false);
+        skipTxt.setEnabled(false);
     }
 
     public void onConnected(@Nullable Bundle bundle) {
-        this.mLocationRequest = new LocationRequest();
-        this.mLocationRequest.setInterval(1000);
-        this.mLocationRequest.setFastestInterval(1000);
-        this.mLocationRequest.setPriority(102);
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setPriority(102);
         if (ContextCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION") == null) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(this.mGoogleApiClient, this.mLocationRequest, (LocationListener) this);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
     }
 
@@ -491,53 +449,53 @@ Error: java.lang.NullPointerException
     }
 
     private void saveAddress() {
-        if (this.address != null && this.address.getMapAddress() != null && validate()) {
-            this.customDialog.show();
-            this.apiInterface = (ApiInterface) ApiClient.getRetrofit().create(ApiInterface.class);
-            this.apiInterface.saveAddress(this.address).enqueue(new C13539());
+        if (address != null && address.getMapAddress() != null && validate()) {
+            customDialog.show();
+            apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+            apiInterface.saveAddress(address).enqueue(new C13539());
         }
     }
 
     private void updateAddress() {
-        if (this.address.getType().equalsIgnoreCase(FacebookRequestErrorClassification.KEY_OTHER)) {
-            this.address.setType(this.otherAddressHeaderEt.getText().toString());
+        if (address.getType().equalsIgnoreCase(FacebookRequestErrorClassification.KEY_OTHER)) {
+            address.setType(otherAddressHeaderEt.getText().toString());
         }
-        if (this.address != null && this.address.getId() != null && validate()) {
-            this.customDialog.show();
-            this.apiInterface = (ApiInterface) ApiClient.getRetrofit().create(ApiInterface.class);
-            this.apiInterface.updateAddress(this.address.getId().intValue(), this.address).enqueue(new Callback<Address>() {
+        if (address != null && address.getId() != null && validate()) {
+            customDialog.show();
+            apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+            apiInterface.updateAddress(address.getId().intValue(), address).enqueue(new Callback<Address>() {
                 public void onResponse(@NonNull Call<Address> call, @NonNull Response<Address> response) {
-                    SaveDeliveryLocationActivity.this.customDialog.dismiss();
-                    if (response.isSuccessful() != null) {
-                        GlobalData.selectedAddress = (Address) response.body();
-                        SaveDeliveryLocationActivity.this.finish();
+                    customDialog.dismiss();
+                    if (response.isSuccessful()) {
+                        GlobalData.selectedAddress = response.body();
+                        finish();
                         return;
                     }
-                    Toast.makeText(SaveDeliveryLocationActivity.this, (CharSequence) ErrorUtils.parseError(response).getType().get(0), 0).show();
+                    Toast.makeText(this, ErrorUtils.parseError(response).getType().get(0), 0).show();
                 }
 
                 public void onFailure(@NonNull Call<Address> call, @NonNull Throwable th) {
-                    Log.e(SaveDeliveryLocationActivity.this.TAG, th.toString());
-                    SaveDeliveryLocationActivity.this.customDialog.dismiss();
-                    Toast.makeText(SaveDeliveryLocationActivity.this, "Something went wrong", 1).show();
+                    Log.e(TAG, th.toString());
+                    customDialog.dismiss();
+                    Toast.makeText(this, "Something went wrong", 1).show();
                 }
             });
         }
     }
 
     private boolean validate() {
-        if (this.address.getMapAddress().isEmpty() && this.address.getMapAddress().equals(getResources().getString(R.string.getting_address))) {
+        if (address.getMapAddress().isEmpty() && address.getMapAddress().equals(getResources().getString(R.string.getting_address))) {
             Toast.makeText(this, "Please enter address", 0).show();
             return false;
-        } else if (this.address.getBuilding().isEmpty()) {
+        } else if (address.getBuilding().isEmpty()) {
             Toast.makeText(this, "Please enter Flat No", 0).show();
             return false;
-        } else if (this.address.getLandmark().isEmpty()) {
+        } else if (address.getLandmark().isEmpty()) {
             Toast.makeText(this, "Please enter landmark", 0).show();
             return false;
         } else {
-            if (this.address.getLatitude() != null) {
-                if (this.address.getLongitude() != null) {
+            if (address.getLatitude() != null) {
+                if (address.getLongitude() != null) {
                     return true;
                 }
             }
@@ -548,8 +506,8 @@ Error: java.lang.NullPointerException
 
     public void onBackPressed() {
         super.onBackPressed();
-        if (this.behavior.getState() == 3) {
-            this.behavior.setState(4);
+        if (behavior.getState() == 3) {
+            behavior.setState(4);
         }
         finish();
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
@@ -562,40 +520,40 @@ Error: java.lang.NullPointerException
                 onBackPressed();
                 return;
             case R.id.cancel_txt:
-                this.otherAddressHeaderEt.setVisibility(View.VISIBLE);
-                view = AnimationUtils.loadAnimation(this.context, R.anim.slide_out_right);
+                otherAddressHeaderEt.setVisibility(View.VISIBLE);
+                view = AnimationUtils.loadAnimation(context, R.anim.slide_out_right);
                 view.setDuration(500);
-                this.otherAddressHeaderEt.startAnimation(view);
-                view = AnimationUtils.loadAnimation(this.context, R.anim.slide_in_left);
+                otherAddressHeaderEt.startAnimation(view);
+                view = AnimationUtils.loadAnimation(context, R.anim.slide_in_left);
                 view.setDuration(500);
-                this.typeRadiogroup.startAnimation(view);
-                this.typeRadiogroup.setVisibility(View.VISIBLE);
-                this.otherRadio.setChecked(true);
+                typeRadiogroup.startAnimation(view);
+                typeRadiogroup.setVisibility(View.VISIBLE);
+                otherRadio.setChecked(true);
                 return;
             case R.id.imgCurrentLoc:
-                if (this.crtLat != null && this.crtLng != null) {
-                    this.mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(new LatLng(this.crtLat.doubleValue(), this.crtLng.doubleValue())).zoom(16.0f).build()));
+                if (crtLat != null && crtLng != null) {
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(new LatLng(crtLat.doubleValue(), crtLng.doubleValue())).zoom(16.0f).build()));
                     return;
                 }
                 return;
             case R.id.save:
-                this.address.setMapAddress(this.addressEdit.getText().toString());
-                this.address.setBuilding(this.flatNoEdit.getText().toString());
-                this.address.setLandmark(this.landmark.getText().toString());
-                if (!(this.address.getType().equalsIgnoreCase(FacebookRequestErrorClassification.KEY_OTHER) == null && this.address.getType().equalsIgnoreCase("") == null)) {
-                    this.address.setType(this.otherAddressHeaderEt.getText().toString());
+                address.setMapAddress(addressEdit.getText().toString());
+                address.setBuilding(flatNoEdit.getText().toString());
+                address.setLandmark(landmark.getText().toString());
+                if (!(address.getType().equalsIgnoreCase(FacebookRequestErrorClassification.KEY_OTHER) == null && address.getType().equalsIgnoreCase("") == null)) {
+                    address.setType(otherAddressHeaderEt.getText().toString());
                 }
-                if (this.address.getBuilding().equalsIgnoreCase("") != null) {
-                    Toast.makeText(this.context, "Please enter House/ flat no ", 0).show();
+                if (address.getBuilding().equalsIgnoreCase("")) {
+                    Toast.makeText(context, "Please enter House/ flat no ", 0).show();
                     return;
-                } else if (this.address.getLandmark().equalsIgnoreCase("") != null) {
-                    Toast.makeText(this.context, "Please enter landmark ", 0).show();
+                } else if (address.getLandmark().equalsIgnoreCase("")) {
+                    Toast.makeText(context, "Please enter landmark ", 0).show();
                     return;
                 } else {
-                    if (this.address.getType().equalsIgnoreCase("") != null) {
-                        this.address.setType(FacebookRequestErrorClassification.KEY_OTHER);
+                    if (address.getType().equalsIgnoreCase("")) {
+                        address.setType(FacebookRequestErrorClassification.KEY_OTHER);
                     }
-                    if (this.address.getId() != null) {
+                    if (address.getId() != null) {
                         updateAddress();
                         return;
                     } else {
@@ -604,10 +562,10 @@ Error: java.lang.NullPointerException
                     }
                 }
             case R.id.skip_txt:
-                this.address.setMapAddress(this.addressEdit.getText().toString());
-                this.address.setType(this.addressHeader);
-                GlobalData.selectedAddress = this.address;
-                startActivity(new Intent(this.context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                address.setMapAddress(addressEdit.getText().toString());
+                address.setType(addressHeader);
+                GlobalData.selectedAddress = address;
+                startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
                 return;
             default:
@@ -621,15 +579,15 @@ Error: java.lang.NullPointerException
         }
 
         public void onClick(View view) {
-            SaveDeliveryLocationActivity.this.currentLocImg.setBackgroundResource(R.drawable.ic_other_marker);
-            SaveDeliveryLocationActivity.this.otherAddressTitleLayout.setVisibility(View.VISIBLE);
-            view = AnimationUtils.loadAnimation(SaveDeliveryLocationActivity.this.context, R.anim.slide_in_right);
+            currentLocImg.setBackgroundResource(R.drawable.ic_other_marker);
+            otherAddressTitleLayout.setVisibility(View.VISIBLE);
+            view = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
             view.setDuration(500);
-            Animation loadAnimation = AnimationUtils.loadAnimation(SaveDeliveryLocationActivity.this.context, R.anim.slide_out_left);
+            Animation loadAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_out_left);
             loadAnimation.setDuration(500);
-            SaveDeliveryLocationActivity.this.typeRadiogroup.startAnimation(loadAnimation);
-            SaveDeliveryLocationActivity.this.otherAddressTitleLayout.startAnimation(view);
-            SaveDeliveryLocationActivity.this.typeRadiogroup.setVisibility(View.GONE);
+            typeRadiogroup.startAnimation(loadAnimation);
+            otherAddressTitleLayout.startAnimation(view);
+            typeRadiogroup.setVisibility(View.GONE);
         }
     }
 
@@ -639,28 +597,28 @@ Error: java.lang.NullPointerException
         }
 
         public void onCheckedChanged(RadioGroup radioGroup, int i) {
-            RadioButton radioButton = (RadioButton) radioGroup.findViewById(i);
+            RadioButton radioButton = radioGroup.findViewById(i);
             if (radioButton.getText().toString().toLowerCase().equals("home") != 0) {
-                SaveDeliveryLocationActivity.this.currentLocImg.setBackgroundResource(R.drawable.ic_hoem_marker);
+                currentLocImg.setBackgroundResource(R.drawable.ic_hoem_marker);
             } else if (radioButton.getText().toString().toLowerCase().equals("work") != 0) {
-                SaveDeliveryLocationActivity.this.currentLocImg.setBackgroundResource(R.drawable.ic_work_marker);
-            } else if (radioButton.getText().toString().equalsIgnoreCase(SaveDeliveryLocationActivity.this.getResources().getString(R.string.other)) != 0) {
-                SaveDeliveryLocationActivity.this.currentLocImg.setBackgroundResource(R.drawable.ic_other_marker);
-                SaveDeliveryLocationActivity.this.otherAddressTitleLayout.setVisibility(View.VISIBLE);
-                i = AnimationUtils.loadAnimation(SaveDeliveryLocationActivity.this.context, R.anim.slide_in_right);
+                currentLocImg.setBackgroundResource(R.drawable.ic_work_marker);
+            } else if (radioButton.getText().toString().equalsIgnoreCase(getResources().getString(R.string.other)) != 0) {
+                currentLocImg.setBackgroundResource(R.drawable.ic_other_marker);
+                otherAddressTitleLayout.setVisibility(View.VISIBLE);
+                i = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
                 i.setDuration(500);
-                Animation loadAnimation = AnimationUtils.loadAnimation(SaveDeliveryLocationActivity.this.context, R.anim.slide_out_left);
+                Animation loadAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_out_left);
                 loadAnimation.setDuration(500);
-                SaveDeliveryLocationActivity.this.typeRadiogroup.startAnimation(loadAnimation);
-                SaveDeliveryLocationActivity.this.otherAddressTitleLayout.startAnimation(i);
-                SaveDeliveryLocationActivity.this.typeRadiogroup.setVisibility(View.GONE);
+                typeRadiogroup.startAnimation(loadAnimation);
+                otherAddressTitleLayout.startAnimation(i);
+                typeRadiogroup.setVisibility(View.GONE);
             }
             i = System.out;
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("typeRadiogroup ");
             stringBuilder.append(radioButton.getText().toString().toLowerCase());
             i.println(stringBuilder.toString());
-            SaveDeliveryLocationActivity.this.address.setType(radioButton.getText().toString().toLowerCase());
+            address.setType(radioButton.getText().toString().toLowerCase());
         }
     }
 
@@ -670,9 +628,9 @@ Error: java.lang.NullPointerException
         }
 
         public void run() {
-            SaveDeliveryLocationActivity.this.avdProgress.stop();
-            if (SaveDeliveryLocationActivity.this.animationLineCartAdd != null) {
-                SaveDeliveryLocationActivity.this.animationLineCartAdd.setVisibility(4);
+            avdProgress.stop();
+            if (animationLineCartAdd != null) {
+                animationLineCartAdd.setVisibility(4);
             }
         }
     }
@@ -684,7 +642,7 @@ Error: java.lang.NullPointerException
 
         public void onSuccess(Location location) {
             if (location != null) {
-                SaveDeliveryLocationActivity.this.getAddress(location.getLatitude(), location.getLongitude());
+                getAddress(location.getLatitude(), location.getLongitude());
             }
         }
     }
@@ -696,7 +654,7 @@ Error: java.lang.NullPointerException
 
         public void onSuccess(Location location) {
             if (location != null) {
-                SaveDeliveryLocationActivity.this.getAddress(location.getLatitude(), location.getLongitude());
+                getAddress(location.getLatitude(), location.getLongitude());
             }
         }
     }
@@ -708,22 +666,21 @@ Error: java.lang.NullPointerException
 
         public void onStateChanged(@NonNull View view, int i) {
             if (4 == i) {
-                SaveDeliveryLocationActivity.this.dummyImageView.startAnimation(SaveDeliveryLocationActivity.this.slide_down);
-                SaveDeliveryLocationActivity.this.dummyImageView.setVisibility(View.GONE);
+                dummyImageView.startAnimation(slide_down);
+                dummyImageView.setVisibility(View.GONE);
             } else if (3 == i) {
-                SaveDeliveryLocationActivity.this.dummyImageView.setVisibility(View.VISIBLE);
-                SaveDeliveryLocationActivity.this.dummyImageView.startAnimation(SaveDeliveryLocationActivity.this.slide_up);
+                dummyImageView.setVisibility(View.VISIBLE);
+                dummyImageView.startAnimation(slide_up);
             }
         }
 
         public void onSlide(@NonNull View view, float f) {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("");
             stringBuilder.append(f);
             Log.e("Slide :", stringBuilder.toString());
             if (((double) f) < 0.9d) {
-                SaveDeliveryLocationActivity.this.dummyImageView.setVisibility(1.1E-44f);
-                SaveDeliveryLocationActivity.this.dummyImageView.startAnimation(SaveDeliveryLocationActivity.this.slide_down);
+                dummyImageView.setVisibility(1.1E-44f);
+                dummyImageView.startAnimation(slide_down);
             }
         }
     }
@@ -738,10 +695,10 @@ Error: java.lang.NullPointerException
                 System.out.println("Place not found");
             } else {
                 Place place = placeBuffer.get(View.VISIBLE);
-                SaveDeliveryLocationActivity.this.addressEdit.setText(place.getAddress());
+                addressEdit.setText(place.getAddress());
                 LatLng latLng = place.getLatLng();
-                SaveDeliveryLocationActivity.this.value = 1;
-                SaveDeliveryLocationActivity.this.mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(latLng).zoom(16.0f).build()));
+                value = 1;
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(latLng).zoom(16.0f).build()));
             }
             placeBuffer.release();
         }
@@ -753,26 +710,26 @@ Error: java.lang.NullPointerException
         }
 
         public void onResponse(@NonNull Call<Address> call, @NonNull Response<Address> response) {
-            SaveDeliveryLocationActivity.this.customDialog.dismiss();
+            customDialog.dismiss();
             if (response.isSuccessful() == null) {
-                Toast.makeText(SaveDeliveryLocationActivity.this, (CharSequence) ErrorUtils.parseError(response).getType().get(0), 0).show();
-            } else if (SaveDeliveryLocationActivity.this.isAddressSave != null) {
+                Toast.makeText(this, ErrorUtils.parseError(response).getType().get(0), 0).show();
+            } else if (isAddressSave != null) {
                 call = new Intent();
-                GlobalData.selectedAddress = (Address) response.body();
+                GlobalData.selectedAddress = response.body();
                 GlobalData.addressList.getAddresses().add(response.body());
-                SaveDeliveryLocationActivity.this.setResult(-1, call);
-                SaveDeliveryLocationActivity.this.finish();
+                setResult(-1, call);
+                finish();
             } else {
-                GlobalData.selectedAddress = (Address) response.body();
+                GlobalData.selectedAddress = response.body();
                 GlobalData.addressList.getAddresses().add(response.body());
-                SaveDeliveryLocationActivity.this.finish();
+                finish();
             }
         }
 
         public void onFailure(@NonNull Call<Address> call, @NonNull Throwable th) {
-            Log.e(SaveDeliveryLocationActivity.this.TAG, th.toString());
-            SaveDeliveryLocationActivity.this.customDialog.dismiss();
-            Toast.makeText(SaveDeliveryLocationActivity.this, "Something went wrong", 1).show();
+            Log.e(TAG, th.toString());
+            customDialog.dismiss();
+            Toast.makeText(this, "Something went wrong", 1).show();
         }
     }
 }

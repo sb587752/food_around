@@ -44,7 +44,7 @@ public class ManageAddressActivity extends AppCompatActivity {
     ManageAddressAdapter adapter;
     @BindView(2131296296)
     Button addNewAddress;
-    ApiInterface apiInterface = ((ApiInterface) ApiClient.getRetrofit().create(ApiInterface.class));
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     @BindView(2131296515)
     TextView errorLayoutDescription;
     boolean isSuccessDelete = false;
@@ -59,13 +59,13 @@ public class ManageAddressActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView((int) R.layout.activity_manage_address);
+        setContentView(R.layout.activity_manage_address);
         getWindow().setFlags(1024, 1024);
-        ButterKnife.bind((Activity) this);
+        ButterKnife.bind(this);
         setSupportActionBar(this.toolbar);
-        this.toolbar.setNavigationIcon((int) R.drawable.ic_back);
+        this.toolbar.setNavigationIcon(R.drawable.ic_back);
         this.toolbar.setNavigationOnClickListener(new C07381());
-        errorLayout = (RelativeLayout) findViewById(R.id.error_layout);
+        errorLayout = findViewById(R.id.error_layout);
         this.locations = new ArrayList();
         this.adapter = new ManageAddressAdapter(this.locations, this);
         this.manageAddressRv.setLayoutManager(new LinearLayoutManager(this));
@@ -117,8 +117,8 @@ public class ManageAddressActivity extends AppCompatActivity {
             ManageAddressActivity.this.skeletonScreen.hide();
             if (response.isSuccessful() != null) {
                 ManageAddressActivity.this.locations.clear();
-                ManageAddressActivity.this.locations.addAll((Collection) response.body());
-                GlobalData.profileModel.setAddresses((List) response.body());
+                ManageAddressActivity.this.locations.addAll(response.body());
+                GlobalData.profileModel.setAddresses(response.body());
                 if (ManageAddressActivity.this.locations.size() == null) {
                     ManageAddressActivity.errorLayout.setVisibility(null);
                     return;

@@ -1,6 +1,5 @@
 package com.opalfire.orderaround.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,61 +25,65 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class FilterActivity extends AppCompatActivity implements OnClickListener {
     public static Button applyFilterBtn = null;
     public static boolean isReset = false;
     public static TextView resetTxt;
-    @BindView(2131296417)
+    @BindView(R.id.close_img)
     ImageView closeImg;
-    @BindView(2131296548)
-    RecyclerView filterRv;
-    @BindView(2131296914)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.filter_rv)
+    RecyclerView filterRv;
+    @BindView(R.id.apply_filter)
+    Button applyFilter;
     private FilterAdapter adapter;
-    private List<FilterModel> modelListReference = new ArrayList();
+    private List<FilterModel> modelListReference = new ArrayList<>();
 
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView((int) R.layout.activity_filter);
-        ButterKnife.bind((Activity) this);
+        setContentView(R.layout.activity_filter);
+        ButterKnife.bind(this);
         getWindow().setFlags(1024, 1024);
-        applyFilterBtn = (Button) findViewById(R.id.apply_filter);
-        resetTxt = (TextView) findViewById(R.id.reset_txt);
-        this.closeImg.setOnClickListener(new C07291());
-        bundle = new ArrayList();
-        ArrayList arrayList = new ArrayList();
+        applyFilterBtn = findViewById(R.id.apply_filter);
+        resetTxt = findViewById(R.id.reset_txt);
+        closeImg.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(R.anim.anim_nothing, R.anim.slide_down);
+            }
+        });
+        List<Cuisine> cuisineList = new ArrayList<>();
         Cuisine cuisine = new Cuisine();
         cuisine.setName("Offers");
         Cuisine cuisine2 = new Cuisine();
         cuisine2.setName("Pure veg");
-        List arrayList2 = new ArrayList();
-        arrayList2.add(cuisine);
-        arrayList2.add(cuisine2);
+        List<Cuisine> cuisineList1 = new ArrayList();
+        cuisineList1.add(cuisine);
+        cuisineList1.add(cuisine2);
         FilterModel filterModel = new FilterModel();
         filterModel.setHeader("Show Restaurants With");
-        filterModel.setCuisines(arrayList2);
-        bundle.add(filterModel);
-        List arrayList3 = new ArrayList();
+        filterModel.setCuisines(cuisineList1);
+        modelListReference.add(filterModel);
+        List<String> cuisineStr = new ArrayList<>();
         if (GlobalData.cuisineList != null) {
             for (Cuisine name : GlobalData.cuisineList) {
-                arrayList3.add(name.getName());
+                cuisineStr.add(name.getName());
             }
             filterModel = new FilterModel();
             filterModel.setHeader("Cuisines");
             filterModel.setCuisines(GlobalData.cuisineList);
-            bundle.add(filterModel);
-            this.modelListReference.clear();
-            this.modelListReference.addAll(bundle);
-            this.filterRv.setLayoutManager(new LinearLayoutManager(this));
-            this.adapter = new FilterAdapter(this, this.modelListReference);
-            if (HomeFragment.isFilterApplied != null) {
-                isReset = null;
-            } else {
-                isReset = true;
-            }
-            this.filterRv.setAdapter(this.adapter);
+            modelListReference.add(filterModel);
+            modelListReference.clear();
+            modelListReference.addAll(modelListReference);
+            filterRv.setLayoutManager(new LinearLayoutManager(this));
+            adapter = new FilterAdapter(this, modelListReference);
+            isReset = !HomeFragment.isFilterApplied;
+            filterRv.setAdapter(adapter);
         }
         resetTxt.setOnClickListener(this);
         applyFilterBtn.setOnClickListener(this);
@@ -98,43 +101,31 @@ public class FilterActivity extends AppCompatActivity implements OnClickListener
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_down);
     }
 
+    @OnClick({R.id.apply_filter, R.id.reset_txt})
     public void onClick(View view) {
-        view = view.getId();
-        if (view == R.id.apply_filter) {
+        if (view.getId() == R.id.apply_filter) {
             GlobalData.isPureVegApplied = FilterAdapter.isPureVegApplied;
             GlobalData.isOfferApplied = FilterAdapter.isOfferApplied;
-            GlobalData.cuisineIdArrayList = new ArrayList();
+            GlobalData.cuisineIdArrayList = new ArrayList<>();
             GlobalData.cuisineIdArrayList.addAll(FilterAdapter.cuisineIdList);
-            HomeFragment.isFilterApplied = null;
-            if (GlobalData.isOfferApplied != null) {
+            HomeFragment.isFilterApplied = GlobalData.isOfferApplied;
+            if (GlobalData.isPureVegApplied) {
                 HomeFragment.isFilterApplied = true;
             }
-            if (GlobalData.isPureVegApplied != null) {
-                HomeFragment.isFilterApplied = true;
-            }
-            if (!(GlobalData.cuisineIdArrayList == null || GlobalData.cuisineIdArrayList.size() == null)) {
+            if (!(GlobalData.cuisineIdArrayList == null || GlobalData.cuisineIdArrayList.size() == 0)) {
                 HomeFragment.isFilterApplied = true;
             }
             setResult(-1, new Intent());
             finish();
-        } else if (view == R.id.reset_txt) {
+        } else if (view.getId() == R.id.reset_txt) {
             isReset = true;
-            this.adapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         }
     }
 
+    @Override
     protected void attachBaseContext(Context context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(context));
     }
 
-    /* renamed from: com.entriver.orderaround.activities.FilterActivity$1 */
-    class C07291 implements OnClickListener {
-        C07291() {
-        }
-
-        public void onClick(View view) {
-            FilterActivity.this.finish();
-            FilterActivity.this.overridePendingTransition(R.anim.anim_nothing, R.anim.slide_down);
-        }
-    }
 }
