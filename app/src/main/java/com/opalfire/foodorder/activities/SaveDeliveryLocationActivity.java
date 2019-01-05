@@ -1,6 +1,5 @@
-package com.opalfire.orderaround.activities;
+package com.opalfire.foodorder.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Geocoder;
@@ -56,14 +55,14 @@ import com.google.android.gms.maps.model.CameraPosition.Builder;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.opalfire.orderaround.HomeActivity;
-import com.opalfire.orderaround.R;
-import com.opalfire.orderaround.build.api.ApiClient;
-import com.opalfire.orderaround.build.api.ApiInterface;
-import com.opalfire.orderaround.build.api.ErrorUtils;
-import com.opalfire.orderaround.helper.CustomDialog;
-import com.opalfire.orderaround.helper.GlobalData;
-import com.opalfire.orderaround.models.Address;
+import com.opalfire.foodorder.HomeActivity;
+import com.opalfire.foodorder.R;
+import com.opalfire.foodorder.build.api.ApiClient;
+import com.opalfire.foodorder.build.api.ApiInterface;
+import com.opalfire.foodorder.build.api.ErrorUtils;
+import com.opalfire.foodorder.helper.CustomDialog;
+import com.opalfire.foodorder.helper.GlobalData;
+import com.opalfire.foodorder.models.Address;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -86,54 +85,53 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class SaveDeliveryLocationActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, OnCameraMoveListener, OnCameraIdleListener, ConnectionCallbacks, OnConnectionFailedListener {
     Runnable action = new C07607();
     Address address = null;
-    @BindView(2131296306)
-    EditText addressEdit;
-    @BindView(2131296322)
-    ImageView animationLineCartAdd;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     AnimatedVectorDrawableCompat avdProgress;
-    @BindView(2131296335)
-    ImageView backArrow;
-    @BindView(2131296360)
-    CardView bottomSheet;
-    @BindView(2131296386)
-    TextView cancelTxt;
     Context context;
-    @BindView(2131296442)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(2131296448)
-    ImageView currentLocImg;
+
     CustomDialog customDialog;
-    @BindView(2131296502)
-    ImageView dummyImageView;
-    @BindView(2131296552)
-    EditText flatNoEdit;
-    @BindView(2131296584)
-    RadioButton homeRadio;
-    @BindView(2131296594)
-    ImageView imgCurrentLoc;
     boolean isAddressSave = false;
     boolean isSkipVisible = false;
-    @BindView(2131296611)
-    EditText landmark;
     FusedLocationProviderClient mFusedLocationClient;
-    @BindView(2131296703)
-    EditText otherAddressHeaderEt;
-    @BindView(2131296704)
-    RelativeLayout otherAddressTitleLayout;
-    @BindView(2131296706)
-    RadioButton otherRadio;
     Retrofit retrofit;
-    @BindView(2131296800)
-    Button save;
-    @BindView(2131296851)
-    TextView skipTxt;
     Animation slide_down;
     Animation slide_up;
-    @BindView(2131296934)
-    RadioGroup typeRadiogroup;
-    @BindView(2131296974)
+    @BindView(R.id.imgCurrentLoc)
+    ImageView imgCurrentLoc;
+    @BindView(R.id.current_loc_img)
+    ImageView currentLocImg;
+    @BindView(R.id.dummy_image_view)
+    ImageView dummyImageView;
+    @BindView(R.id.backArrow)
+    ImageView backArrow;
+    @BindView(R.id.animation_line_cart_add)
+    ImageView animationLineCartAdd;
+    @BindView(R.id.skip_txt)
+    TextView skipTxt;
+    @BindView(R.id.flat_no)
+    EditText flatNo;
+    @BindView(R.id.landmark)
+    EditText landmark;
+    @BindView(R.id.home_radio)
+    RadioButton homeRadio;
+    @BindView(R.id.work_radio)
     RadioButton workRadio;
+    @BindView(R.id.other_radio)
+    RadioButton otherRadio;
+    @BindView(R.id.type_radiogroup)
+    RadioGroup typeRadiogroup;
+    @BindView(R.id.other_address_header_et)
+    EditText otherAddressHeaderEt;
+    @BindView(R.id.cancel_txt)
+    TextView cancelTxt;
+    @BindView(R.id.other_address_title_layout)
+    RelativeLayout otherAddressTitleLayout;
+    @BindView(R.id.save)
+    Button save;
+    @BindView(R.id.bottom_sheet)
+    CardView bottomSheet;
+    @BindView(R.id.coordinatorLayout)
+    CoordinatorLayout coordinatorLayout;
     private String TAG = "SaveDelivery";
     private String addressHeader = "";
     private BottomSheetBehavior behavior;
@@ -184,7 +182,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         }
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
         behavior = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet));
-        behavior.setState(3);
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         dummyImageView.setVisibility(View.VISIBLE);
         behavior.setBottomSheetCallback(new C13503());
         otherRadio.setOnClickListener(new C07584());
@@ -252,22 +250,24 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
             e.printStackTrace();
         }
         Log.i("Map:Style", "Can't find style. Error: ");
-        this.mMap = googleMap;
-        if (this.mMap != null) {
-            this.mMap.getUiSettings().setCompassEnabled(false);
-            this.mMap.setBuildingsEnabled(true);
-            this.mMap.setOnCameraMoveListener(this);
-            this.mMap.setOnCameraIdleListener(this);
-            this.mMap.getUiSettings().setRotateGesturesEnabled(false);
-            this.mMap.getUiSettings().setTiltGesturesEnabled(false);
+        mMap = googleMap;
+        if (mMap != null) {
+            mMap.getUiSettings().setCompassEnabled(false);
+            mMap.setBuildingsEnabled(true);
+            mMap.setOnCameraMoveListener(this);
+            mMap.setOnCameraIdleListener(this);
+            mMap.getUiSettings().setRotateGesturesEnabled(false);
+            mMap.getUiSettings().setTiltGesturesEnabled(false);
         }
     }
 
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(Places.GEO_DATA_API).addApi(LocationServices.API).build();
         mGoogleApiClient.connect();
+
     }
 
+    @Override
     public void onLocationChanged(Location location) {
         System.out.println("onLocationChanged ");
         if (value == 0) {
@@ -275,12 +275,12 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
             if (address.getId() == null) {
                 mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(16.0f).build()));
             } else {
-                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(new LatLng(address.getLatitude().doubleValue(), address.getLongitude().doubleValue())).zoom(16.0f).build()));
+                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(new LatLng(address.getLatitude(), address.getLongitude())).zoom(16.0f).build()));
             }
             getAddress(location.getLatitude(), location.getLongitude());
         }
-        crtLat = Double.valueOf(location.getLatitude());
-        crtLng = Double.valueOf(location.getLongitude());
+        crtLat = location.getLatitude();
+        crtLng = location.getLongitude();
     }
 
     private void getAddress(double d, double d2) {
@@ -434,6 +434,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         skipTxt.setEnabled(false);
     }
 
+    @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
@@ -573,7 +574,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$4 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$4 */
     class C07584 implements OnClickListener {
         C07584() {
         }
@@ -591,7 +592,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$5 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$5 */
     class C07595 implements OnCheckedChangeListener {
         C07595() {
         }
@@ -622,7 +623,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$7 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$7 */
     class C07607 implements Runnable {
         C07607() {
         }
@@ -635,7 +636,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$1 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$1 */
     class C13481 implements OnSuccessListener<Location> {
         C13481() {
         }
@@ -647,7 +648,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$2 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$2 */
     class C13492 implements OnSuccessListener<Location> {
         C13492() {
         }
@@ -659,7 +660,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$3 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$3 */
     class C13503 extends BottomSheetCallback {
         C13503() {
         }
@@ -685,7 +686,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$6 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$6 */
     class C13516 implements ResultCallback<PlaceBuffer> {
         C13516() {
         }
@@ -704,7 +705,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         }
     }
 
-    /* renamed from: com.entriver.orderaround.activities.SaveDeliveryLocationActivity$9 */
+    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$9 */
     class C13539 implements Callback<Address> {
         C13539() {
         }
