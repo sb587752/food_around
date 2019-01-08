@@ -1,7 +1,9 @@
 package com.opalfire.foodorder.activities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build.VERSION;
@@ -12,6 +14,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetBehavior.BottomSheetCallback;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -65,9 +68,10 @@ import com.opalfire.foodorder.helper.GlobalData;
 import com.opalfire.foodorder.models.Address;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.PrintStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -83,12 +87,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SaveDeliveryLocationActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, OnCameraMoveListener, OnCameraIdleListener, ConnectionCallbacks, OnConnectionFailedListener {
-    Runnable action = new C07607();
-    Address address = null;
-    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+    public static ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+    Address addressModel = null;
     AnimatedVectorDrawableCompat avdProgress;
     Context context;
-
     CustomDialog customDialog;
     boolean isAddressSave = false;
     boolean isSkipVisible = false;
@@ -106,6 +108,15 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     ImageView backArrow;
     @BindView(R.id.animation_line_cart_add)
     ImageView animationLineCartAdd;
+    Runnable action = new Runnable() {
+        @Override
+        public void run() {
+            avdProgress.stop();
+            if (animationLineCartAdd != null) {
+                animationLineCartAdd.setVisibility(View.INVISIBLE);
+            }
+        }
+    };
     @BindView(R.id.skip_txt)
     TextView skipTxt;
     @BindView(R.id.flat_no)
@@ -132,6 +143,8 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     CardView bottomSheet;
     @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.address_edit)
+    EditText addressEdit;
     private String TAG = "SaveDelivery";
     private String addressHeader = "";
     private BottomSheetBehavior behavior;
@@ -153,15 +166,15 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     }
 
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save_delivery_location);
         getWindow().setFlags(1024, 1024);
         ButterKnife.bind(this);
         context = this;
-        address = new Address();
+        addressModel = new Address();
         customDialog = new CustomDialog(context);
-        address.setType(FacebookRequestErrorClassification.KEY_OTHER);
+        addressModel.setType(FacebookRequestErrorClassification.KEY_OTHER);
         initializeAvd();
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         slide_down = AnimationUtils.loadAnimation(context, R.anim.slide_down);
@@ -175,54 +188,144 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         }
         if (VERSION.SDK_INT < 23) {
             buildGoogleApiClient();
-            mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new C13492());
-        } else if (ContextCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION") == null) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        getAddress(location.getLatitude(), location.getLongitude());
+                    }
+                }
+            });
+        } else if (ContextCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION") == 0) {
             buildGoogleApiClient();
-            mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new C13481());
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        getAddress(location.getLatitude(), location.getLongitude());
+                    }
+                }
+            });
         }
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
         behavior = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet));
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         dummyImageView.setVisibility(View.VISIBLE);
-        behavior.setBottomSheetCallback(new C13503());
-        otherRadio.setOnClickListener(new C07584());
-        typeRadiogroup.setOnCheckedChangeListener(new C07595());
-        bundle = getIntent().getExtras();
+        behavior.setBottomSheetCallback(new BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        dummyImageView.setVisibility(View.VISIBLE);
+                        dummyImageView.startAnimation(slide_up);
+                        break;
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        dummyImageView.startAnimation(slide_down);
+                        dummyImageView.setVisibility(View.GONE);
+                        break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+                if (((double) v) < 0.9d) {
+                    dummyImageView.setVisibility(View.GONE);
+                    dummyImageView.startAnimation(slide_down);
+                }
+            }
+        });
+        otherRadio.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentLocImg.setBackgroundResource(R.drawable.ic_other_marker);
+                otherAddressTitleLayout.setVisibility(View.VISIBLE);
+                Animation slide_in_right = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
+                slide_in_right.setDuration(500);
+                Animation slide_out_left = AnimationUtils.loadAnimation(context, R.anim.slide_out_left);
+                slide_out_left.setDuration(500);
+                typeRadiogroup.startAnimation(slide_out_left);
+                otherAddressTitleLayout.startAnimation(slide_in_right);
+                typeRadiogroup.setVisibility(View.GONE);
+            }
+        });
+        typeRadiogroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton radioButton = radioGroup.findViewById(i);
+                if (radioButton.getText().toString().toLowerCase().equals("home")) {
+                    currentLocImg.setBackgroundResource(R.drawable.ic_hoem_marker);
+                } else if (radioButton.getText().toString().toLowerCase().equals("work")) {
+                    currentLocImg.setBackgroundResource(R.drawable.ic_work_marker);
+                } else if (radioButton.getText().toString().equalsIgnoreCase(getResources().getString(R.string.other))) {
+                    currentLocImg.setBackgroundResource(R.drawable.ic_other_marker);
+                    otherAddressTitleLayout.setVisibility(View.VISIBLE);
+                    Animation slide_in_right = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
+                    slide_in_right.setDuration(500);
+                    Animation slide_out_left = AnimationUtils.loadAnimation(context, R.anim.slide_out_left);
+                    slide_out_left.setDuration(500);
+                    typeRadiogroup.startAnimation(slide_out_left);
+                    otherAddressTitleLayout.startAnimation(slide_in_right);
+                    typeRadiogroup.setVisibility(View.GONE);
+                }
+                addressModel.setType(radioButton.getText().toString().toLowerCase());
+            }
+        });
+        Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             String string = bundle.getString("place_id");
-            bundle = bundle.getString("edit");
+            String editString = bundle.getString("edit");
             if (string != null) {
-                Places.GeoDataApi.getPlaceById(mGoogleApiClient, string).setResultCallback(new C13516());
-            }
-            if (bundle != null && bundle.equals("yes") && GlobalData.selectedAddress != null) {
-                address = GlobalData.selectedAddress;
-                addressEdit.setText(address.getMapAddress());
-                flatNoEdit.setText(address.getBuilding());
-                landmark.setText(address.getLandmark());
-                bundle = address.getType();
-                Object obj = -1;
-                int hashCode = bundle.hashCode();
-                if (hashCode != 3208415) {
-                    if (hashCode == 3655441) {
-                        if (bundle.equals("work")) {
-                            obj = 1;
+                Places.GeoDataApi.getPlaceById(mGoogleApiClient, string).setResultCallback(new ResultCallback<PlaceBuffer>() {
+                    @Override
+                    public void onResult(@NonNull PlaceBuffer places) {
+                        if (!places.getStatus().isSuccess() || places.getCount() <= 0) {
+                            Log.d(TAG, "Place not found");
+                        } else {
+                            Place place = places.get(View.VISIBLE);
+                            addressEdit.setText(place.getAddress());
+                            LatLng latLng = place.getLatLng();
+                            value = 1;
+                            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(latLng).zoom(16.0f).build()));
                         }
+                        places.release();
                     }
-                } else if (bundle.equals("home")) {
-                    obj = null;
-                }
-                switch (obj) {
-                    case null:
+                });
+            }
+            if (editString != null && editString.equals("yes") && GlobalData.selectedAddress != null) {
+                addressModel = GlobalData.selectedAddress;
+                addressEdit.setText(addressModel.getMapAddress());
+                flatNo.setText(addressModel.getBuilding());
+                landmark.setText(addressModel.getLandmark());
+                String addressType = addressModel.getType();
+                switch (addressType) {
+                    case "work":
                         homeRadio.setChecked(true);
-                        return;
-                    case 1:
+                        break;
+                    case "home":
                         workRadio.setChecked(true);
-                        return;
+                        break;
                     default:
-                        otherAddressHeaderEt.setText(address.getType());
+                        otherAddressHeaderEt.setText(addressModel.getType());
                         otherRadio.setChecked(true);
-                        return;
+                        break;
                 }
+
             }
         }
     }
@@ -239,6 +342,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         animationLineCartAdd.postDelayed(action, 1500);
     }
 
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         try {
             if (!googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json))) {
@@ -272,10 +376,10 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         System.out.println("onLocationChanged ");
         if (value == 0) {
             value = 1;
-            if (address.getId() == null) {
+            if (addressModel.getId() == null) {
                 mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(16.0f).build()));
             } else {
-                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(new LatLng(address.getLatitude(), address.getLongitude())).zoom(16.0f).build()));
+                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(new LatLng(addressModel.getLatitude(), addressModel.getLongitude())).zoom(16.0f).build()));
             }
             getAddress(location.getLatitude(), location.getLongitude());
         }
@@ -284,20 +388,14 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     }
 
     private void getAddress(double d, double d2) {
-        PrintStream printStream = System.out;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("GetAddress ");
-        stringBuilder.append(d);
-        stringBuilder.append(" | ");
-        stringBuilder.append(d2);
-        printStream.println(stringBuilder.toString());
+        Log.d(TAG, "getAddress: " + d + " | " + d2);
         try {
             List fromLocation = new Geocoder(this, Locale.getDefault()).getFromLocation(d, d2, 1);
             if (fromLocation == null || fromLocation.size() <= 0) {
                 getAddress(context, d, d2);
                 return;
             }
-            android.location.Address address = (android.location.Address) fromLocation.get(View.VISIBLE);
+            android.location.Address address = (android.location.Address) fromLocation.get(0);
             StringBuilder stringBuilder2 = new StringBuilder();
             if (address.getMaxAddressLineIndex() > 0) {
                 for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
@@ -307,115 +405,75 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 stringBuilder2.append(address.getAddressLine(0));
             }
             addressEdit.setText(stringBuilder2.toString());
-            android.location.Address address2 = (android.location.Address) fromLocation.get(View.VISIBLE);
-            address.setCity(address2.getLocality());
-            address.setState(address2.getAdminArea());
-            address.setCountry(address2.getCountryName());
-            address.setLatitude(Double.valueOf(address2.getLatitude()));
-            address.setLongitude(Double.valueOf(address2.getLongitude()));
-            address.setPincode(address2.getPostalCode());
-            addressHeader = address2.getFeatureName();
+            addressModel.setCity(address.getLocality());
+            addressModel.setState(address.getAdminArea());
+            addressModel.setCountry(address.getCountryName());
+            addressModel.setLatitude(address.getLatitude());
+            addressModel.setLongitude(address.getLongitude());
+            addressModel.setPincode(address.getPostalCode());
+            addressHeader = address.getFeatureName();
         } catch (Exception e) {
             e.printStackTrace();
             getAddress(context, d, d2);
         }
     }
 
-    public void getAddress(Context context, double d, double d2) {
+    public void getAddress(final Context context, final double d, final double d2) {
         retrofit = new Retrofit.Builder().baseUrl("https://maps.googleapis.com/maps/api/geocode/").addConverterFactory(GsonConverterFactory.create()).build();
         apiInterface = retrofit.create(ApiInterface.class);
-        ApiInterface apiInterface = apiInterface;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(d);
-        stringBuilder.append(",");
-        stringBuilder.append(d2);
-        final double d3 = d;
-        final double d4 = d2;
-        final Context context2 = context;
-        apiInterface.getResponse(stringBuilder.toString(), context.getResources().getString(R.string.google_api_key)).enqueue(new Callback<ResponseBody>() {
+
+        apiInterface.getResponse(d + "," + d2, context.getResources().getString(R.string.google_api_key)).enqueue(new Callback<ResponseBody>() {
+            @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("SUCESS");
-                stringBuilder.append(response.body());
-                Log.e("sUCESS", stringBuilder.toString());
+                Log.e(TAG, "onResponse: " + response.toString());
                 if (response.body() != null) {
                     try {
-                        call = new String(response.body().bytes());
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("bodyString");
-                        stringBuilder.append(call);
-                        Log.e("sUCESS", stringBuilder.toString());
-                        call = new JSONObject(call).optJSONArray("results");
-                        if (call.length() > null) {
-                            JSONArray optJSONArray = call.optJSONObject(0).optJSONArray("address_components");
+
+                        JSONArray resArr = new JSONObject(response.body().string()).optJSONArray("results");
+                        if (resArr.length() > 0) {
+                            JSONArray optJSONArray = resArr.optJSONObject(0).optJSONArray("address_components");
                             optJSONArray.optJSONObject(0).optString("long_name");
-                            address.setCity(optJSONArray.optJSONObject(2).optString("long_name"));
-                            address.setState(optJSONArray.optJSONObject(3).optString("long_name"));
+                            addressModel.setCity(optJSONArray.optJSONObject(2).optString("long_name"));
+                            addressModel.setState(optJSONArray.optJSONObject(3).optString("long_name"));
                             if (optJSONArray.optJSONObject(4).optString("long_name") != null) {
-                                address.setCountry(optJSONArray.optJSONObject(4).optString("long_name"));
+                                addressModel.setCountry(optJSONArray.optJSONObject(4).optString("long_name"));
                             }
-                            address.setLatitude(Double.valueOf(d3));
-                            address.setLongitude(Double.valueOf(d4));
-                            address.setPincode(optJSONArray.optJSONObject(5).optString("long_name"));
+                            addressModel.setLatitude(d);
+                            addressModel.setLongitude(d2);
+                            addressModel.setPincode(optJSONArray.optJSONObject(5).optString("long_name"));
                             addressHeader = optJSONArray.optJSONObject(0).optString("long_name");
-                            call = call.optJSONObject(0).optString("formatted_address");
-                            addressEdit.setText(call);
-                            addressHeader = call;
-                            response = new StringBuilder();
-                            response.append("");
-                            response.append(GlobalData.addressHeader);
-                            Log.v("Formatted Address", response.toString());
+                            String formattedAddress = resArr.optJSONObject(0).optString("formatted_address");
+                            addressEdit.setText(formattedAddress);
                         } else {
-                            call = this;
-                            response = new StringBuilder();
-                            response.append("");
-                            response.append(d3);
-                            response.append("");
-                            response.append(d4);
-                            call.addressHeader = response.toString();
+                            Log.e(TAG, "onResponse: " + response.toString());
                         }
-                    } catch (Call<ResponseBody> call2) {
-                        call2.printStackTrace();
-                    } catch (Call<ResponseBody> call22) {
-                        call22.printStackTrace();
+
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
                     }
                 } else {
-                    call22 = this;
-                    response = new StringBuilder();
-                    response.append("");
-                    response.append(d3);
-                    response.append("");
-                    response.append(d4);
-                    call22.addressHeader = response.toString();
+                    Log.e(TAG, "onResponse: " + response.toString());
                 }
-                call22 = new Intent("location");
-                call22.putExtra("message", "This is my message!");
-                LocalBroadcastManager.getInstance(context2).sendBroadcast(call22);
+                Intent intent = new Intent("location");
+                intent.putExtra("message", "This is my message!");
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
             }
 
+            @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable th) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("onFailure");
-                stringBuilder.append(call.request().url());
-                Log.e("onFailure", stringBuilder.toString());
-                call = this;
-                th = new StringBuilder();
-                th.append("");
-                th.append(d3);
-                th.append("");
-                th.append(d4);
-                call.addressHeader = th.toString();
+                Log.e(TAG, "onFailure: Failed to get addressModel", th);
             }
         });
     }
 
+    @Override
     public void onCameraIdle() {
         try {
             CameraPosition cameraPosition = mMap.getCameraPosition();
-            srcLat = Double.valueOf(cameraPosition.target.latitude);
-            srcLng = Double.valueOf(cameraPosition.target.longitude);
+            srcLat = cameraPosition.target.latitude;
+            srcLng = cameraPosition.target.longitude;
             initializeAvd();
-            getAddress(srcLat.doubleValue(), srcLng.doubleValue());
+            getAddress(srcLat, srcLng);
             skipTxt.setAlpha(1.0f);
             skipTxt.setClickable(true);
             skipTxt.setEnabled(true);
@@ -424,6 +482,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         }
     }
 
+    @Override
     public void onCameraMove() {
         behavior.setState(4);
         dummyImageView.setVisibility(View.GONE);
@@ -439,32 +498,58 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setPriority(102);
-        if (ContextCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION") == null) {
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        if (ContextCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION") == 0) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
     }
 
+    @Override
     protected void attachBaseContext(Context context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(context));
     }
 
     private void saveAddress() {
-        if (address != null && address.getMapAddress() != null && validate()) {
+        if (addressModel != null && addressModel.getMapAddress() != null && validate()) {
             customDialog.show();
             apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
-            apiInterface.saveAddress(address).enqueue(new C13539());
+            apiInterface.saveAddress(addressModel).enqueue(new Callback<Address>() {
+
+                @Override
+                public void onResponse(@NonNull Call<Address> call, @NonNull Response<Address> response) {
+                    customDialog.dismiss();
+                    if (response.isSuccessful()) {
+                        Toast.makeText(context, ErrorUtils.parseError(response).getType().get(0), Toast.LENGTH_LONG).show();
+                    } else if (isAddressSave) {
+                        GlobalData.selectedAddress = response.body();
+                        GlobalData.addressList.getAddresses().add(response.body());
+                        setResult(-1, new Intent());
+                        finish();
+                    } else {
+                        GlobalData.selectedAddress = response.body();
+                        GlobalData.addressList.getAddresses().add(response.body());
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<Address> call, @NonNull Throwable th) {
+                    Log.e(TAG, "failed to save the address", th);
+                    customDialog.dismiss();
+                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 
     private void updateAddress() {
-        if (address.getType().equalsIgnoreCase(FacebookRequestErrorClassification.KEY_OTHER)) {
-            address.setType(otherAddressHeaderEt.getText().toString());
+        if (addressModel.getType().equalsIgnoreCase(FacebookRequestErrorClassification.KEY_OTHER)) {
+            addressModel.setType(otherAddressHeaderEt.getText().toString());
         }
-        if (address != null && address.getId() != null && validate()) {
+        if (addressModel != null && addressModel.getId() != null && validate()) {
             customDialog.show();
             apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
-            apiInterface.updateAddress(address.getId().intValue(), address).enqueue(new Callback<Address>() {
+            apiInterface.updateAddress(addressModel.getId(), addressModel).enqueue(new Callback<Address>() {
                 public void onResponse(@NonNull Call<Address> call, @NonNull Response<Address> response) {
                     customDialog.dismiss();
                     if (response.isSuccessful()) {
@@ -472,39 +557,40 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                         finish();
                         return;
                     }
-                    Toast.makeText(this, ErrorUtils.parseError(response).getType().get(0), 0).show();
+                    Toast.makeText(context, ErrorUtils.parseError(response).getType().get(0), Toast.LENGTH_LONG).show();
                 }
 
                 public void onFailure(@NonNull Call<Address> call, @NonNull Throwable th) {
                     Log.e(TAG, th.toString());
                     customDialog.dismiss();
-                    Toast.makeText(this, "Something went wrong", 1).show();
+                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show();
                 }
             });
         }
     }
 
     private boolean validate() {
-        if (address.getMapAddress().isEmpty() && address.getMapAddress().equals(getResources().getString(R.string.getting_address))) {
-            Toast.makeText(this, "Please enter address", 0).show();
+        if (addressModel.getMapAddress().isEmpty() && addressModel.getMapAddress().equals(getResources().getString(R.string.getting_address))) {
+            Toast.makeText(context, "Please enter addressModel", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (address.getBuilding().isEmpty()) {
-            Toast.makeText(this, "Please enter Flat No", 0).show();
+        } else if (addressModel.getBuilding().isEmpty()) {
+            Toast.makeText(context, "Please enter Flat No", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (address.getLandmark().isEmpty()) {
-            Toast.makeText(this, "Please enter landmark", 0).show();
+        } else if (addressModel.getLandmark().isEmpty()) {
+            Toast.makeText(context, "Please enter landmark", Toast.LENGTH_SHORT).show();
             return false;
         } else {
-            if (address.getLatitude() != null) {
-                if (address.getLongitude() != null) {
+            if (addressModel.getLatitude() != null) {
+                if (addressModel.getLongitude() != null) {
                     return true;
                 }
             }
-            Toast.makeText(this, "Lat & long cannot be left blank", 0).show();
+            Toast.makeText(context, "Lat & long cannot be left blank", Toast.LENGTH_LONG).show();
             return false;
         }
     }
 
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         if (behavior.getState() == 3) {
@@ -514,7 +600,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
-    @OnClick({2131296335, 2131296800, 2131296594, 2131296386, 2131296851})
+    @OnClick({R.id.backArrow, R.id.cancel_txt, R.id.imgCurrentLoc, R.id.save, R.id.skip_txt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.backArrow:
@@ -522,39 +608,39 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 return;
             case R.id.cancel_txt:
                 otherAddressHeaderEt.setVisibility(View.VISIBLE);
-                view = AnimationUtils.loadAnimation(context, R.anim.slide_out_right);
-                view.setDuration(500);
-                otherAddressHeaderEt.startAnimation(view);
-                view = AnimationUtils.loadAnimation(context, R.anim.slide_in_left);
-                view.setDuration(500);
-                typeRadiogroup.startAnimation(view);
+                Animation slide_out_right = AnimationUtils.loadAnimation(context, R.anim.slide_out_right);
+                slide_out_right.setDuration(500);
+                otherAddressHeaderEt.startAnimation(slide_out_right);
+                Animation slide_in_left = AnimationUtils.loadAnimation(context, R.anim.slide_in_left);
+                slide_in_left.setDuration(500);
+                typeRadiogroup.startAnimation(slide_in_left);
                 typeRadiogroup.setVisibility(View.VISIBLE);
                 otherRadio.setChecked(true);
                 return;
             case R.id.imgCurrentLoc:
                 if (crtLat != null && crtLng != null) {
-                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(new LatLng(crtLat.doubleValue(), crtLng.doubleValue())).zoom(16.0f).build()));
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(new LatLng(crtLat, crtLng)).zoom(16.0f).build()));
                     return;
                 }
                 return;
             case R.id.save:
-                address.setMapAddress(addressEdit.getText().toString());
-                address.setBuilding(flatNoEdit.getText().toString());
-                address.setLandmark(landmark.getText().toString());
-                if (!(address.getType().equalsIgnoreCase(FacebookRequestErrorClassification.KEY_OTHER) == null && address.getType().equalsIgnoreCase("") == null)) {
-                    address.setType(otherAddressHeaderEt.getText().toString());
+                addressModel.setMapAddress(addressEdit.getText().toString());
+                addressModel.setBuilding(flatNo.getText().toString());
+                addressModel.setLandmark(landmark.getText().toString());
+                if (!(addressModel.getType().equalsIgnoreCase(FacebookRequestErrorClassification.KEY_OTHER) && addressModel.getType().equalsIgnoreCase(""))) {
+                    addressModel.setType(otherAddressHeaderEt.getText().toString());
                 }
-                if (address.getBuilding().equalsIgnoreCase("")) {
-                    Toast.makeText(context, "Please enter House/ flat no ", 0).show();
+                if (addressModel.getBuilding().equalsIgnoreCase("")) {
+                    Toast.makeText(context, "Please enter House/ flat no ", Toast.LENGTH_SHORT).show();
                     return;
-                } else if (address.getLandmark().equalsIgnoreCase("")) {
-                    Toast.makeText(context, "Please enter landmark ", 0).show();
+                } else if (addressModel.getLandmark().equalsIgnoreCase("")) {
+                    Toast.makeText(context, "Please enter landmark ", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    if (address.getType().equalsIgnoreCase("")) {
-                        address.setType(FacebookRequestErrorClassification.KEY_OTHER);
+                    if (addressModel.getType().equalsIgnoreCase("")) {
+                        addressModel.setType(FacebookRequestErrorClassification.KEY_OTHER);
                     }
-                    if (address.getId() != null) {
+                    if (addressModel.getId() != null) {
                         updateAddress();
                         return;
                     } else {
@@ -563,9 +649,9 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                     }
                 }
             case R.id.skip_txt:
-                address.setMapAddress(addressEdit.getText().toString());
-                address.setType(addressHeader);
-                GlobalData.selectedAddress = address;
+                addressModel.setMapAddress(addressEdit.getText().toString());
+                addressModel.setType(addressHeader);
+                GlobalData.selectedAddress = addressModel;
                 startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
                 return;
@@ -574,163 +660,4 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         }
     }
 
-    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$4 */
-    class C07584 implements OnClickListener {
-        C07584() {
-        }
-
-        public void onClick(View view) {
-            currentLocImg.setBackgroundResource(R.drawable.ic_other_marker);
-            otherAddressTitleLayout.setVisibility(View.VISIBLE);
-            view = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
-            view.setDuration(500);
-            Animation loadAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_out_left);
-            loadAnimation.setDuration(500);
-            typeRadiogroup.startAnimation(loadAnimation);
-            otherAddressTitleLayout.startAnimation(view);
-            typeRadiogroup.setVisibility(View.GONE);
-        }
-    }
-
-    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$5 */
-    class C07595 implements OnCheckedChangeListener {
-        C07595() {
-        }
-
-        public void onCheckedChanged(RadioGroup radioGroup, int i) {
-            RadioButton radioButton = radioGroup.findViewById(i);
-            if (radioButton.getText().toString().toLowerCase().equals("home") != 0) {
-                currentLocImg.setBackgroundResource(R.drawable.ic_hoem_marker);
-            } else if (radioButton.getText().toString().toLowerCase().equals("work") != 0) {
-                currentLocImg.setBackgroundResource(R.drawable.ic_work_marker);
-            } else if (radioButton.getText().toString().equalsIgnoreCase(getResources().getString(R.string.other)) != 0) {
-                currentLocImg.setBackgroundResource(R.drawable.ic_other_marker);
-                otherAddressTitleLayout.setVisibility(View.VISIBLE);
-                i = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
-                i.setDuration(500);
-                Animation loadAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_out_left);
-                loadAnimation.setDuration(500);
-                typeRadiogroup.startAnimation(loadAnimation);
-                otherAddressTitleLayout.startAnimation(i);
-                typeRadiogroup.setVisibility(View.GONE);
-            }
-            i = System.out;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("typeRadiogroup ");
-            stringBuilder.append(radioButton.getText().toString().toLowerCase());
-            i.println(stringBuilder.toString());
-            address.setType(radioButton.getText().toString().toLowerCase());
-        }
-    }
-
-    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$7 */
-    class C07607 implements Runnable {
-        C07607() {
-        }
-
-        public void run() {
-            avdProgress.stop();
-            if (animationLineCartAdd != null) {
-                animationLineCartAdd.setVisibility(4);
-            }
-        }
-    }
-
-    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$1 */
-    class C13481 implements OnSuccessListener<Location> {
-        C13481() {
-        }
-
-        public void onSuccess(Location location) {
-            if (location != null) {
-                getAddress(location.getLatitude(), location.getLongitude());
-            }
-        }
-    }
-
-    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$2 */
-    class C13492 implements OnSuccessListener<Location> {
-        C13492() {
-        }
-
-        public void onSuccess(Location location) {
-            if (location != null) {
-                getAddress(location.getLatitude(), location.getLongitude());
-            }
-        }
-    }
-
-    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$3 */
-    class C13503 extends BottomSheetCallback {
-        C13503() {
-        }
-
-        public void onStateChanged(@NonNull View view, int i) {
-            if (4 == i) {
-                dummyImageView.startAnimation(slide_down);
-                dummyImageView.setVisibility(View.GONE);
-            } else if (3 == i) {
-                dummyImageView.setVisibility(View.VISIBLE);
-                dummyImageView.startAnimation(slide_up);
-            }
-        }
-
-        public void onSlide(@NonNull View view, float f) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(f);
-            Log.e("Slide :", stringBuilder.toString());
-            if (((double) f) < 0.9d) {
-                dummyImageView.setVisibility(1.1E-44f);
-                dummyImageView.startAnimation(slide_down);
-            }
-        }
-    }
-
-    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$6 */
-    class C13516 implements ResultCallback<PlaceBuffer> {
-        C13516() {
-        }
-
-        public void onResult(@NonNull PlaceBuffer placeBuffer) {
-            if (!placeBuffer.getStatus().isSuccess() || placeBuffer.getCount() <= 0) {
-                System.out.println("Place not found");
-            } else {
-                Place place = placeBuffer.get(View.VISIBLE);
-                addressEdit.setText(place.getAddress());
-                LatLng latLng = place.getLatLng();
-                value = 1;
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new Builder().target(latLng).zoom(16.0f).build()));
-            }
-            placeBuffer.release();
-        }
-    }
-
-    /* renamed from: com.entriver.foodorder.activities.SaveDeliveryLocationActivity$9 */
-    class C13539 implements Callback<Address> {
-        C13539() {
-        }
-
-        public void onResponse(@NonNull Call<Address> call, @NonNull Response<Address> response) {
-            customDialog.dismiss();
-            if (response.isSuccessful() == null) {
-                Toast.makeText(this, ErrorUtils.parseError(response).getType().get(0), 0).show();
-            } else if (isAddressSave != null) {
-                call = new Intent();
-                GlobalData.selectedAddress = response.body();
-                GlobalData.addressList.getAddresses().add(response.body());
-                setResult(-1, call);
-                finish();
-            } else {
-                GlobalData.selectedAddress = response.body();
-                GlobalData.addressList.getAddresses().add(response.body());
-                finish();
-            }
-        }
-
-        public void onFailure(@NonNull Call<Address> call, @NonNull Throwable th) {
-            Log.e(TAG, th.toString());
-            customDialog.dismiss();
-            Toast.makeText(this, "Something went wrong", 1).show();
-        }
-    }
 }

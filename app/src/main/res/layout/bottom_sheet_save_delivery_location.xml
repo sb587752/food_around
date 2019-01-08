@@ -67,17 +67,17 @@
                 android:layout_marginTop="16.0dip">
 
                 <EditText
-                    android:id="@+id/address"
+                    android:id="@+id/address_edit"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:hint="@string/address"
+                    android:importantForAutofill="no"
                     android:inputType="text"
                     android:maxLines="1"
                     android:text="hjbashdbhjbashbhjcbdjhbsdhbhjvbhjbdsbvhjnbsdjdbhjnvdbhjvdsbhbhvdbhjvdssbdhjs"
                     android:textColor="@color/colorPrimaryText"
-                    android:textSize="@dimen/text_medium"
-                    android:importantForAutofill="no" />
+                    android:textSize="@dimen/text_medium" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout

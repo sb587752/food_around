@@ -278,4 +278,5 @@
     <string name="fb_login_protocol_scheme">fb284689429068899</string>
     <string name="mobile_number">Mobile number</string>
     <string name="google_maps_key">AIzaSyDJ6K02qxv6LiF4RnUVmVpsci2JzZ-6-FE</string>
+    <string name="getting_address">Identifying Location..</string>
 </resources>
